@@ -28,9 +28,9 @@ html, body {
   bottom: 0;
   left: 0;
   background-repeat: no-repeat;
-  background-position: left bottom;
+  background-position: center;
   background-size: 500px;
-  background-image: url("../../images/pexels-shvetsa-3683041.jpg");
+  background-image: url("../../images/pexels-karolina-grabowska-4021801.jpg");
 }
 .form-structor .signup {
   position: absolute;
