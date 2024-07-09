@@ -8,6 +8,7 @@
     <link rel="icon" type="image/jpg" href="../../images/logo.png" />
     <title>KeepAnEye</title>
     <script src="LoginScreen.js"></script>
+    <script src="../LoginAuth/Auth.js" defer></script>
     <title>Document</title>
 </head>
 
@@ -26,10 +27,10 @@
             <div class="center">
                 <h2 class="form-title" id="login"><span>or</span>Log in</h2>
                 <div class="form-holder">
-                    <input type="email" class="input" placeholder="Email" />
-                    <input type="password" class="input" placeholder="Password" />
+                    <input type="email" class="input" placeholder="Email" id="loginEmail" />
+                    <input type="password" class="input" placeholder="Password" id="loginPassword" />
                 </div>
-                <button class="submit-btn">Log in</button>
+                <button class="submit-btn" id="loginButton">Log in</button>
             </div>
         </div>
     </div>
