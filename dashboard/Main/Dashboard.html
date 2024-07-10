@@ -7,18 +7,28 @@
     <link rel="stylesheet" href="Dashboard.css">
     <link rel="icon" type="image/jpg" href="../../images/logo.png" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"
+        integrity="sha384-2huaZvOR9iDzHqslqwpR87isEmrfxqyWOF7hr7BY6KG0+hVKLoEXMPUJw3ynWuhO"
+        crossorigin="anonymous"></script>
+
+
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
-
+    <script src="../UserInfo/GeneralInfo.js" defer></script>
     <script src="Dashboard.js" defer></script>
 
     <title>KeepAnEye</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
+    <div id="userData"></div>
+
     <div class="grid">
         <header class="header">
             <i class="fas fa-bars header__menu"></i>
@@ -52,7 +62,7 @@
                 <i class="fas fa-times sidenav__brand-close"></i>
             </div>
             <div class="sidenav__profile">
-                <div class="sidenav__profile-avatar"></div>
+                <img src="../../images/logo.png" class="sidenav__profile-avatar"></img>
                 <div class="sidenav__profile-title text-light">Usuario</div>
             </div>
             <div class="row row--align-v-center row--align-h-center">
@@ -242,9 +252,12 @@
             <div class="main-header">
                 <div class="main-header__intro-wrapper">
                     <div class="main-header__welcome">
-                        <div class="main-header__welcome-title text-light">Welcome, <strong>Usuario</strong></div>
-                        <div class="main-header__welcome-subtitle text-light">How are you today?</div>
+                        <div class="main-header__welcome-title">Bienvenido </div>
+                        <div class="main-header__welcome-title text-light"></div>
+                        <br>
+                        <!-- <div class="main-header__welcome-subtitle text-light">Como estas hoy?</div> -->
                     </div>
+
                     <div class="quickview">
                         <div class="quickview__item">
                             <div class="quickview__item-total">41</div>
@@ -435,6 +448,50 @@
             <p>Crafted with <i class="fas fa-heart footer__icon"></i> </p>
         </footer>
     </div>
+    <div id="map" style="height: 500px;"></div>
+    <script>
+        const map = L.map('map').setView([0, 0], 2);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            maxZoom: 18,
+        }).addTo(map);
+
+        const marker = L.marker([0, 0]).addTo(map);
+
+        const socket = io();
+
+        socket.on('locationUpdate', (locations) => {
+            const latestLocation = locations[locations.length - 1];
+            const { latitude, longitude } = latestLocation.coordinates;
+            marker.setLatLng([latitude, longitude]);
+            map.setView([latitude, longitude], 13);
+        });
+
+        // Cargar la ubicación inicial
+        fetch(`/api/metrics/location/${localStorage.getItem('userId')}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch location data: ${response.statusText}`);
+                }
+                return response.json();
+            })
+            .then(locations => {
+                const latestLocation = locations[locations.length - 1];
+                const { latitude, longitude } = latestLocation.coordinates;
+                marker.setLatLng([latitude, longitude]);
+                map.setView([latitude, longitude], 13);
+            })
+            .catch(error => {
+                console.error("Error fetching location data:", error);
+                // Manejar el error como sea necesario, por ejemplo, mostrar un mensaje al usuario
+            });
+
+    </script>
 </body>
 
 </html>
