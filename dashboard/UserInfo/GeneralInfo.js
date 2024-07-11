@@ -71,6 +71,42 @@ async function fetchUserProfile() {
     redirectToLogin();
   }
 }
+// Función para obtener las métricas del usuario
+async function fetchUserMetrics() {
+  const userId = localStorage.getItem("userId");
+  if (!userId) {
+    console.error("User ID not found");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/metrics/location/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch metrics: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("User metrics:", data);
+
+    // Llamar a la función para renderizar las métricas en el gráfico
+    renderChart(data);
+  } catch (error) {
+    console.error("Error fetching user metrics:", error.message);
+  }
+}
+
+// Llamar a la función para obtener las métricas cuando se cargue la página
+window.onload = () => {
+  fetchUserProfile();
+  fetchUserMetrics();
+};
 
 // Función para redirigir al login
 function redirectToLogin() {
@@ -78,4 +114,4 @@ function redirectToLogin() {
 }
 
 // Llamar a la función para obtener el perfil del usuario cuando se cargue la página
-window.onload = fetchUserProfile;
+// window.onload = fetchUserProfile;
