@@ -102,6 +102,32 @@ async function fetchUserMetrics() {
   }
 }
 
+//Obtener los documentos del usuario
+async function fetchUserDocuments() {
+  const userId = localStorage.getItem("userId");
+  if (!userId) {
+    console.error("User ID not found");
+    return;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/documents/all/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Failed to fetch metrics: ${response.statusText}`);
+    }
+    const data = await response.json();
+    console.log("User documents:", data);
+  } catch {
+    console.error("Error fetching user documents:", error.message);
+  }
+}
+
 // Llamar a la función para obtener las métricas cuando se cargue la página
 window.onload = () => {
   fetchUserProfile();

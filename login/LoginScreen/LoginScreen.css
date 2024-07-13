@@ -4,14 +4,15 @@
 * { box-sizing:border-box; }
 
 body {
-	font-family: Helvetica;
+	font-family: "Poppins", sans-serif ;
 	background: #eee;
   -webkit-font-smoothing: antialiased;
+  overflow: hidden;
 }
 
 hgroup { 
 	text-align:center;
-	margin-top: 4em;
+	/* margin-top: 4em; */
 }
 
 h1, h3 { font-weight: 300; }
@@ -70,7 +71,7 @@ input:focus ~ label, input.used ~ label {
 	top: -20px;
   transform: scale(.75); left: -2px;
 	/* font-size: 14px; */
-	color: #4a89dc;
+	color: #00A696;
 }
 
 
@@ -88,7 +89,7 @@ input:focus ~ label, input.used ~ label {
 	width: 0;
 	bottom: 1px; 
 	position: absolute;
-	background: #4a89dc; 
+	background: #007C71; 
 	transition: all 0.2s ease;
 }
 
@@ -157,11 +158,11 @@ input:focus ~ .highlight {
 /* Button modifiers */
 
 .buttonBlue {
-  background: #4a89dc;
+  background: #007C71;
   text-shadow: 1px 1px 0 rgba(39, 110, 204, .5);
 }
 
-.buttonBlue:hover { background: #357bd8; }
+.buttonBlue:hover { background: #00A696; }
 
 
 /* Ripples container */

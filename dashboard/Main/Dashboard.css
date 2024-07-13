@@ -156,7 +156,7 @@ a {
   grid-area: sidenav;
   height: 100%;
   overflow-y: auto;
-  background-color: #394263;
+  background-color: #007C71;
   color: #FFF;
   width: 240px;
   transform: translateX(-245px);
@@ -235,7 +235,7 @@ a {
   width: 240px;
   padding: 0;
   margin: 0;
-  background-color: #394263;
+  background-color: #007C71;
   list-style-type: none;
 }
 .navList__heading {
@@ -318,7 +318,7 @@ a {
 
 .main {
   grid-area: main;
-  background-color: #EAEDF1;
+  background-color: #E9E9F2;
   color: #394263;
 }
 .main__cards {
