@@ -113,7 +113,47 @@ function updateMap(metrics) {
 document.addEventListener("DOMContentLoaded", initMap);
 
 // Función para obtener los documentos del usuario
-async function fetchUserDocuments() {
+async function fetchUserMedicalInfo() {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+
+  if (!token || !userId) {
+    console.error("Token or User ID not found");
+    redirectToLogin();
+    return;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/medical-info/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      if (response.status === 401) {
+        console.error("Unauthorized access - redirecting to login");
+        redirectToLogin();
+      }
+      throw new Error(`Failed to fetch medical info: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("User medical info:", data);
+    fetchUserMedicalDocuments();
+
+    // Aquí puedes manejar los datos recibidos y actualizar la UI
+  } catch (error) {
+    console.error("Error fetching medical info:", error.message);
+    // Añade manejo adicional de errores según sea necesario
+  }
+}
+
+//Obtener todos los documentos de un usurio
+
+async function fetchUserMedicalDocuments() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   if (!token || !userId) {
@@ -123,7 +163,7 @@ async function fetchUserDocuments() {
   }
 
   try {
-    const response = await fetch(`${apiUrl}/documents/all/${userId}`, {
+    const response = await fetch(`${apiUrl}/medical-info/documents/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -132,19 +172,15 @@ async function fetchUserDocuments() {
     });
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch documents: ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch medical documents: ${response.statusText}`
+      );
     }
 
     const data = await response.json();
-    console.log("User documents:", data);
-
-    if (data.length === 0) {
-      console.warn("No documents found for user ID:", userId);
-    }
-
-    // Manejar los documentos recibidos aquí
+    console.log("User medical documents:", data);
   } catch (error) {
-    console.error("Error fetching user documents:", error.message);
+    console.error("Error fetching medical documents:", error.message);
   }
 }
 
@@ -222,7 +258,7 @@ async function fetchUserProfile() {
 
     // Llamar a las funciones de obtención de métricas y documentos después de obtener el perfil
     fetchUserMetrics();
-    fetchUserDocuments();
+    fetchUserMedicalInfo();
   } catch (error) {
     console.error("Error fetching user profile:", error.message);
     redirectToLogin();
@@ -234,3 +270,9 @@ window.onload = fetchUserProfile;
 function redirectToLogin() {
   window.location.href = "../../login/LoginScreen/LoginScreen.html";
 }
+// function redirectToLogin() {
+//   // Esperar 3 segundos antes de redirigir
+//   setTimeout(() => {
+//     window.location.href = "../../login/LoginScreen/LoginScreen.html";
+//   }, 30000); // 3000 milisegundos = 3 segundos
+// }

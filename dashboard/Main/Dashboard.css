@@ -457,8 +457,10 @@ a {
   align-items: center;
   justify-content: space-between;
   height: 50px;
-  background-color: #394263;
+  background-color: #00A696;
   color: #FFF;
+  padding-left: 20px;
+  padding-right: 20px;
 }
 .card__header-title {
   margin: 0 20px;
@@ -645,6 +647,10 @@ a {
   height: 300px;
   font-size: 11px;
   min-width: 0;
+  background-color: #E9E9F2;
+  padding-bottom: 20px;
+  padding-right: 20px;
+  padding-left: 20px;
 }
 
 
