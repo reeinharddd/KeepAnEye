@@ -18,7 +18,6 @@ document.addEventListener("DOMContentLoaded", fetchAllUserMetrics);
 document.addEventListener("DOMContentLoaded", initMap);
 
 // Conectar al Hub de SignalR
-// Conectar al Hub de SignalR
 const connection = new signalR.HubConnectionBuilder()
   .withUrl("http://localhost:5123/metricsHub", {
     transport: signalR.HttpTransportType.WebSockets,
@@ -125,7 +124,7 @@ async function fetchUserProfile() {
 async function fetchAllUserMetrics() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-
+  console.log("token", token);
   if (!token || !userId) {
     console.error("Token or User ID not found");
     redirectToLogin(); // Función para redirigir al usuario a la página de inicio de sesión
@@ -349,7 +348,7 @@ function updateMap(metrics) {
   }
 }
 
-// Función para obtener los documentos del usuario
+// Función para obtener toda la informacion medica del usuario
 async function fetchUserMedicalInfo() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
@@ -361,7 +360,7 @@ async function fetchUserMedicalInfo() {
   }
 
   try {
-    const response = await fetch(`${apiUrl}/medical-info/${userId}`, {
+    const response = await fetch(`${apiUrl}/medicalinfo/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -399,7 +398,7 @@ async function fetchUserMedicalDocuments() {
   }
 
   try {
-    const response = await fetch(`${apiUrl}/medical-info/documents/${userId}`, {
+    const response = await fetch(`${apiUrl}/medicalinfo/documents/${userId}`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -415,9 +414,59 @@ async function fetchUserMedicalDocuments() {
 
     const data = await response.json();
     console.log("User medical documents:", data);
+    renderDocuments(data);
   } catch (error) {
     console.error("Error fetching medical documents:", error.message);
   }
+}
+
+function getMimeTypeImage(mimeType) {
+  switch (mimeType) {
+    case "application/pdf":
+      return "../../images/pdf.png"; // Ruta a la imagen del ícono PDF
+    case "application/msword":
+    case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+      return "../../images/word.png"; // Ruta a la imagen del ícono Word
+    // Agrega más casos según los tipos MIME que necesites manejar
+    default:
+      return "../../images/css.png"; // Ruta a la imagen por defecto
+  }
+}
+
+function renderDocuments(documents) {
+  const container = document.querySelector(".documents");
+
+  // Ordena los documentos por fecha (más reciente primero)
+  documents.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Limita a 4 documentos
+  documents.slice(0, 4).forEach((doc) => {
+    const documentElement = document.createElement("div");
+    documentElement.classList.add("document");
+
+    const documentImg = document.createElement("div");
+    documentImg.classList.add("document__img");
+    documentImg.style.backgroundImage = `url(${getMimeTypeImage(
+      doc.mimeType
+    )})`;
+
+    const documentTitle = document.createElement("div");
+    documentTitle.classList.add("document__title");
+    documentTitle.textContent = doc.name;
+
+    const documentDate = document.createElement("div");
+    documentDate.classList.add("document__date");
+    const date = new Date(doc.date);
+    documentDate.textContent = `${
+      date.getMonth() + 1
+    }/${date.getDate()}/${date.getFullYear()}`;
+
+    documentElement.appendChild(documentImg);
+    documentElement.appendChild(documentTitle);
+    documentElement.appendChild(documentDate);
+
+    container.appendChild(documentElement);
+  });
 }
 
 // function redirectToLogin() {
