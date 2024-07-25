@@ -11,8 +11,33 @@ let geofenceCircle;
 //Funcion para obtener los datos del usuario cunado se cargue la pagina
 window.onload = fetchUserProfile;
 
+//Obtener Metrics:
+document.addEventListener("DOMContentLoaded", fetchAllUserMetrics);
+
 // Llamar a la función de inicialización del mapa cuando se cargue la página
 document.addEventListener("DOMContentLoaded", initMap);
+
+// Conectar al Hub de SignalR
+// Conectar al Hub de SignalR
+const connection = new signalR.HubConnectionBuilder()
+  .withUrl("http://localhost:5123/metricsHub", {
+    transport: signalR.HttpTransportType.WebSockets,
+  })
+  .configureLogging(signalR.LogLevel.Trace)
+  .build();
+
+connection.on("ReceiveLocationUpdate", (locationData) => {
+  console.log("Location update received:", locationData);
+  updateMap([locationData]);
+});
+
+connection.on("ReceiveAllMetrics", (metricsData) => {
+  console.log("All metrics received:", metricsData);
+});
+
+connection
+  .start()
+  .catch((err) => console.error("SignalR Connection Error: ", err));
 
 // Llamada a la función principal de obtención de perfil de usuario y datos iniciales
 async function fetchUserProfile() {
@@ -128,53 +153,93 @@ async function fetchAllUserMetrics() {
       return;
     }
 
-    // Extraer el último resultado de cada métrica
-    const latestMetrics = {
-      heartRate: null,
-      temperature: null,
-    };
+    updateMetricsDOM(data);
 
-    data.forEach((record) => {
-      if (record.heartRate.length > 0) {
-        const latestHeartRate = record.heartRate.reduce((prev, current) =>
-          new Date(current.timestamp) > new Date(prev.timestamp)
-            ? current
-            : prev
-        );
-        latestMetrics.heartRate = latestHeartRate;
-      }
+    // // Extraer el último resultado de cada métrica
+    // const latestMetrics = {
+    //   heartRate: null,
+    //   temperature: null,
+    // };
 
-      if (record.temperature.length > 0) {
-        const latestTemperature = record.temperature.reduce((prev, current) =>
-          new Date(current.timestamp) > new Date(prev.timestamp)
-            ? current
-            : prev
-        );
-        latestMetrics.temperature = latestTemperature;
-      }
-    });
+    // data.forEach((record) => {
+    //   if (record.heartRate.length > 0) {
+    //     const latestHeartRate = record.heartRate.reduce((prev, current) =>
+    //       new Date(current.timestamp) > new Date(prev.timestamp)
+    //         ? current
+    //         : prev
+    //     );
+    //     latestMetrics.heartRate = latestHeartRate;
+    //   }
 
-    // Inyectar los últimos resultados en el DOM
-    const heartRateTotalElement = document.getElementById("heartRateTotal");
-    const temperatureTotalElement = document.getElementById("temperatureTotal");
+    //   if (record.temperature.length > 0) {
+    //     const latestTemperature = record.temperature.reduce((prev, current) =>
+    //       new Date(current.timestamp) > new Date(prev.timestamp)
+    //         ? current
+    //         : prev
+    //     );
+    //     latestMetrics.temperature = latestTemperature;
+    //   }
+    // });
 
-    if (heartRateTotalElement) {
-      heartRateTotalElement.textContent = latestMetrics.heartRate
-        ? `${latestMetrics.heartRate.value} bpm`
-        : "No data";
-    }
+    // // Inyectar los últimos resultados en el DOM
+    // const heartRateTotalElement = document.getElementById("heartRateTotal");
+    // const temperatureTotalElement = document.getElementById("temperatureTotal");
 
-    if (temperatureTotalElement) {
-      temperatureTotalElement.textContent = latestMetrics.temperature
-        ? `${latestMetrics.temperature.value} °C`
-        : "No data";
-    }
+    // if (heartRateTotalElement) {
+    //   heartRateTotalElement.textContent = latestMetrics.heartRate
+    //     ? `${latestMetrics.heartRate.value} bpm`
+    //     : "No data";
+    // }
+
+    // if (temperatureTotalElement) {
+    //   temperatureTotalElement.textContent = latestMetrics.temperature
+    //     ? `${latestMetrics.temperature.value} °C`
+    //     : "No data";
+    // }
   } catch (error) {
     console.error("Error fetching all user metrics:", error.message);
   }
 }
 
-document.addEventListener("DOMContentLoaded", fetchAllUserMetrics);
+//actualizar metricas del dom
+function updateMetricsDOM(data) {
+  const latestMetrics = {
+    heartRate: null,
+    temperature: null,
+  };
+
+  data.forEach((record) => {
+    if (record.heartRate.length > 0) {
+      const latestHeartRate = record.heartRate.reduce((prev, current) =>
+        new Date(current.timestamp) > new Date(prev.timestamp) ? current : prev
+      );
+      latestMetrics.heartRate = latestHeartRate;
+    }
+
+    if (record.temperature.length > 0) {
+      const latestTemperature = record.temperature.reduce((prev, current) =>
+        new Date(current.timestamp) > new Date(prev.timestamp) ? current : prev
+      );
+      latestMetrics.temperature = latestTemperature;
+    }
+  });
+
+  // Inyectar los últimos resultados en el DOM
+  const heartRateTotalElement = document.getElementById("heartRateTotal");
+  const temperatureTotalElement = document.getElementById("temperatureTotal");
+
+  if (heartRateTotalElement) {
+    heartRateTotalElement.textContent = latestMetrics.heartRate
+      ? `${latestMetrics.heartRate.value} bpm`
+      : "No data";
+  }
+
+  if (temperatureTotalElement) {
+    temperatureTotalElement.textContent = latestMetrics.temperature
+      ? `${latestMetrics.temperature.value} °C`
+      : "No data";
+  }
+}
 
 // Función para obtener la ubicaion del usuario
 async function fetchUserLocation() {
