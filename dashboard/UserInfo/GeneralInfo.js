@@ -3,7 +3,7 @@
 // dashboard/Main/Dashboard.js
 
 // Obtener la URL de la API desde las variables de entorno
-const apiUrl = "http://localhost:9000/api"; // Fallback a URL local si no se define en .env
+const apiUrl = "http://localhost:5123/api"; // Fallback a URL local si no se define en .env
 let map;
 let pinMarker;
 let geofenceCircle;
@@ -194,7 +194,7 @@ async function fetchUserProfile() {
   }
 
   try {
-    const response = await fetch(`${apiUrl}/users/profile`, {
+    const response = await fetch(`${apiUrl}/user/profile`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -267,12 +267,12 @@ async function fetchUserProfile() {
 
 window.onload = fetchUserProfile;
 
-function redirectToLogin() {
-  window.location.href = "../../login/LoginScreen/LoginScreen.html";
-}
 // function redirectToLogin() {
-//   // Esperar 3 segundos antes de redirigir
-//   setTimeout(() => {
-//     window.location.href = "../../login/LoginScreen/LoginScreen.html";
-//   }, 30000); // 3000 milisegundos = 3 segundos
+//   window.location.href = "../../login/LoginScreen/LoginScreen.html";
 // }
+function redirectToLogin() {
+  // Esperar 3 segundos antes de redirigir
+  setTimeout(() => {
+    window.location.href = "../../login/LoginScreen/LoginScreen.html";
+  }, 30000); // 3000 milisegundos = 3 segundos
+}

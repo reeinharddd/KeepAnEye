@@ -3,12 +3,12 @@
 // login/LoginAuth/Auth.js
 
 // Obtener la URL de la API desde las variables de entorno
-const apiUrl = "http://localhost:9000/api"; // Fallback a URL local si no se define en .env
+const apiUrl = "http://localhost:5123/api"; // Fallback a URL local si no se define en .env
 
 // Función para hacer login
 async function loginUser(email, password) {
   try {
-    const response = await fetch(`${apiUrl}/users/login`, {
+    const response = await fetch(`${apiUrl}/user/login`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
