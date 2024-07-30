@@ -280,7 +280,7 @@ function initMap() {
   map = L.map("map").setView([mapCenter.lat, mapCenter.lng], 25); // Inicializar mapa con Leaflet, nivel de zoom 13
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 25,
+    maxZoom: 50,
     attribution:
       'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
@@ -342,7 +342,7 @@ function updateMap(metrics) {
         color: "#00A696", // Color del borde del círculo
         fillColor: "#00A696", // Color de relleno del círculo
         fillOpacity: 0.3, // Opacidad de relleno
-        radius: 5000, // Radio de 5 km (ajusta según sea necesario)
+        radius: 500, // Radio de 5 km (ajusta según sea necesario)
       }
     ).addTo(map);
   }

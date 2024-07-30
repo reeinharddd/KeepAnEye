@@ -634,7 +634,7 @@ a {
   transform: translateY(-4px);
 }
 .document__title {
-  margin: 8px 0 2px;
+  margin:8px 0px 10px 25px;
   color: #777;
 }
 .document__date {
