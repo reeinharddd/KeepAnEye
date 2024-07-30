@@ -114,6 +114,8 @@ async function fetchUserProfile() {
     fetchUserLocation();
     fetchUserMedicalInfo();
     fetchAllUserMetrics();
+    fetchAllUserAppointments();
+    fetchAllUserReminders();
   } catch (error) {
     console.error("Error fetching user profile:", error.message);
     redirectToLogin();
@@ -385,6 +387,206 @@ async function fetchUserMedicalInfo() {
     console.error("Error fetching medical info:", error.message);
     // Añade manejo adicional de errores según sea necesario
   }
+}
+
+// Función para obtener todas las citas del usuario
+async function fetchAllUserAppointments() {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  if (!token || !userId) {
+    console.error("Token or User ID not found");
+    redirectToLogin();
+    return;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/appointment/patient/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch appointments: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("All user appointments:", data);
+
+    // Llamar a la función para actualizar el DOM con las citas
+    updateAppointmentsDOM(data);
+  } catch (error) {
+    console.error("Error fetching all user appointments:", error.message);
+  }
+}
+
+// Función para obtener todos los recordatorios del usuario
+async function fetchAllUserReminders() {
+  const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
+  if (!token || !userId) {
+    console.error("Token or User ID not found");
+    redirectToLogin();
+    return;
+  }
+
+  try {
+    const response = await fetch(`${apiUrl}/reminder/user/${userId}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch reminders: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    console.log("All user reminders:", data);
+
+    // Llamar a la función para actualizar el DOM con los recordatorios
+    updateRemindersDOM(data);
+  } catch (error) {
+    console.error("Error fetching all user reminders:", error.message);
+  }
+}
+
+// Función para actualizar el DOM con las citas
+function updateAppointmentsDOM(appointments) {
+  const container = document.getElementById("appointmentsContainer");
+  if (!container) {
+    console.error("Appointments container not found");
+    return;
+  }
+
+  // Obtener la fecha y hora actual
+  const now = new Date();
+
+  // Filtrar las citas para excluir las anteriores a la fecha y hora actual
+  const filteredAppointments = appointments.filter((appointment) => {
+    const appointmentDate = new Date(appointment.date);
+    return appointmentDate >= now;
+  });
+
+  // Ordenar las citas filtradas por fecha en orden descendente
+  filteredAppointments.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Limitar a 5 citas
+  const limitedAppointments = filteredAppointments.slice(0, 5);
+
+  // Limpiar el contenedor antes de añadir nuevos elementos
+  container.innerHTML = "";
+
+  limitedAppointments.forEach((appointment) => {
+    const appointmentElement = document.createElement("div");
+    appointmentElement.classList.add("card__row");
+
+    const iconElement = document.createElement("div");
+    iconElement.classList.add("card__icon");
+    iconElement.innerHTML = '<i class="fas fa-calendar-alt"></i>';
+
+    const timeElement = document.createElement("div");
+    timeElement.classList.add("card__time");
+    timeElement.innerHTML = `<div>${new Date(
+      appointment.date
+    ).toLocaleDateString()}</div>`;
+
+    const detailElement = document.createElement("div");
+    detailElement.classList.add("card__detail");
+
+    const sourceElement = document.createElement("div");
+    sourceElement.classList.add("card__source", "text-bold");
+    sourceElement.textContent = `${appointment.place}`;
+
+    const descriptionElement = document.createElement("div");
+    descriptionElement.classList.add("card__description");
+    descriptionElement.textContent = `Time: ${appointment.time}`;
+
+    const noteElement = document.createElement("div");
+    noteElement.classList.add("card__note");
+    // noteElement.textContent = `Patient ID: ${appointment.patientId}`;
+
+    detailElement.appendChild(sourceElement);
+    detailElement.appendChild(descriptionElement);
+    detailElement.appendChild(noteElement);
+
+    appointmentElement.appendChild(iconElement);
+    appointmentElement.appendChild(timeElement);
+    appointmentElement.appendChild(detailElement);
+
+    container.appendChild(appointmentElement);
+  });
+}
+
+// Función para actualizar el DOM con los recordatorios
+function updateRemindersDOM(reminders) {
+  const container = document.getElementById("remindersContainer");
+  if (!container) {
+    console.error("Reminders container not found");
+    return;
+  }
+
+  // Obtener la fecha y hora actual
+  const now = new Date();
+
+  // Filtrar los recordatorios para excluir los anteriores a la fecha y hora actual
+  const filteredReminders = reminders.filter((reminder) => {
+    const reminderDate = new Date(reminder.date);
+    return reminderDate >= now;
+  });
+
+  // Ordenar los recordatorios filtrados por fecha en orden descendente
+  filteredReminders.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Limitar a 5 recordatorios
+  const limitedReminders = filteredReminders.slice(0, 5);
+
+  // Limpiar el contenedor antes de añadir nuevos elementos
+  container.innerHTML = "";
+
+  limitedReminders.forEach((reminder) => {
+    const reminderElement = document.createElement("div");
+    reminderElement.classList.add("card__row");
+
+    const iconElement = document.createElement("div");
+    iconElement.classList.add("card__icon");
+    iconElement.innerHTML = '<i class="fas fa-bell"></i>';
+
+    const timeElement = document.createElement("div");
+    timeElement.classList.add("card__time");
+    timeElement.innerHTML = `<div>${new Date(
+      reminder.date
+    ).toLocaleDateString()}</div>`;
+
+    const detailElement = document.createElement("div");
+    detailElement.classList.add("card__detail");
+
+    const sourceElement = document.createElement("div");
+    sourceElement.classList.add("card__source", "text-bold");
+    sourceElement.textContent = reminder.title || "No Title";
+
+    const descriptionElement = document.createElement("div");
+    descriptionElement.classList.add("card__description");
+    descriptionElement.textContent = reminder.description || "No Description";
+
+    const noteElement = document.createElement("div");
+    noteElement.classList.add("card__note");
+    noteElement.textContent = reminder.date;
+
+    detailElement.appendChild(sourceElement);
+    detailElement.appendChild(descriptionElement);
+    detailElement.appendChild(noteElement);
+
+    reminderElement.appendChild(iconElement);
+    reminderElement.appendChild(timeElement);
+    reminderElement.appendChild(detailElement);
+
+    container.appendChild(reminderElement);
+  });
 }
 
 //Obtener todos los documentos de un usurio
