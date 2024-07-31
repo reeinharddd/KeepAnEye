@@ -243,10 +243,12 @@ function updateMetricsDOM(data) {
 }
 
 // Función para obtener la ubicaion del usuario
+// Función para obtener la ubicación del usuario
 async function fetchUserLocation() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
   console.log("userId", userId);
+
   if (!token || !userId) {
     console.error("Token or User ID not found");
     redirectToLogin();
@@ -269,7 +271,6 @@ async function fetchUserLocation() {
     const data = await response.json();
     console.log("User Location:", data);
 
-    // Llamar a la función para renderizar las métricas en el gráfico
     updateMap(data);
   } catch (error) {
     console.error("Error fetching user metrics:", error.message);
@@ -279,34 +280,32 @@ async function fetchUserLocation() {
 // Función para inicializar el mapa
 function initMap() {
   const mapCenter = { lat: 34.052235, lng: -118.243683 }; // Centro inicial del mapa cerca de Los Ángeles
-  map = L.map("map").setView([mapCenter.lat, mapCenter.lng], 25); // Inicializar mapa con Leaflet, nivel de zoom 13
+  map = L.map("map").setView([mapCenter.lat, mapCenter.lng], 13); // Nivel de zoom ajustado a 13
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-    maxZoom: 50,
+    maxZoom: 18,
     attribution:
       'Map data &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  // Llamar a la función para obtener y mostrar las métricas del usuario
   fetchUserLocation();
 }
 
-//Funcion para actualizar el mapa con la ubicación del usuario
+// Función para actualizar el mapa con la ubicación del usuario
 function updateMap(metrics) {
-  // Si no hay métricas, no hacer nada
-  if (metrics.length === 0) {
+  if (!metrics || metrics.length === 0) {
     console.warn("No metrics available to display");
     return;
   }
 
-  // Encontrar la ubicación más reciente
-  const latestLocation = metrics.reduce((prev, current) => {
-    return new Date(current.timestamp) > new Date(prev.timestamp)
-      ? current
-      : prev;
-  });
+  // const latestLocation = metrics.reduce((prev, current) => {
+  //   return new Date(current.timestamp) > new Date(prev.timestamp)
+  //     ? current
+  //     : prev;
+  // });
+  const latestLocation = metrics[metrics.length - 1];
 
-  // Si el marcador ya existe, actualizar su posición; de lo contrario, crear uno nuevo
+  // Actualizar el marcador si existe o crear uno nuevo
   if (pinMarker) {
     pinMarker.setLatLng([
       latestLocation.coordinates.latitude,
@@ -328,7 +327,7 @@ function updateMap(metrics) {
     13 // Nivel de zoom, ajusta según sea necesario
   );
 
-  // Definir un círculo para el geofence
+  // Actualizar o crear el círculo del geofence
   if (geofenceCircle) {
     geofenceCircle.setLatLng([
       latestLocation.coordinates.latitude,
@@ -344,7 +343,7 @@ function updateMap(metrics) {
         color: "#00A696", // Color del borde del círculo
         fillColor: "#00A696", // Color de relleno del círculo
         fillOpacity: 0.3, // Opacidad de relleno
-        radius: 500, // Radio de 5 km (ajusta según sea necesario)
+        radius: 500, // Radio de 500 metros
       }
     ).addTo(map);
   }
@@ -671,12 +670,12 @@ function renderDocuments(documents) {
   });
 }
 
-// function redirectToLogin() {
-//   window.location.href = "../../login/LoginScreen/LoginScreen.html";
-// }
 function redirectToLogin() {
-  // Esperar 3 segundos antes de redirigir
-  setTimeout(() => {
-    window.location.href = "../../login/LoginScreen/LoginScreen.html";
-  }, 30000); // 3000 milisegundos = 3 segundos
+  window.location.href = "../../login/LoginScreen/LoginScreen.html";
 }
+// function redirectToLogin() {
+//   // Esperar 3 segundos antes de redirigir
+//   setTimeout(() => {
+//     window.location.href = "../../login/LoginScreen/LoginScreen.html";
+//   }, 30000); // 3000 milisegundos = 3 segundos
+// }

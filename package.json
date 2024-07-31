@@ -1,6 +1,8 @@
 {
 	"dependencies": {
+		"@faker-js/faker": "^8.4.1",
 		"@microsoft/signalr": "^8.0.7",
-		"dotenv": "^16.4.5"
+		"dotenv": "^16.4.5",
+		"mongodb": "^6.8.0"
 	}
 }
