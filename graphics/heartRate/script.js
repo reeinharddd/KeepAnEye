@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const data = await fetchAllUserMetrics();
     const dailyAverages = calculateDailyAverages(data);
 
-    Highcharts.stockChart("container", {
+    Highcharts.stockChart("main", {
       chart: {
         type: "line",
       },

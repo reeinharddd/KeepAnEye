@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KeepAnEye Sidebar</title>
+</head>
+
+<body>
+    <div class="sidenav__brand">
+        <a class="sidenav__brand-link" href="../../dashboard/Main/Dashboard.html">Keep<span
+                class="text-light">AnEye</span></a>
+        <i class="fas fa-times sidenav__brand-close"></i>
+    </div>
+    <div class="sidenav__profile">
+        <img src="../../images/logo.png" class="sidenav__profile-avatar" alt="Profile Avatar">
+        <div class="sidenav__profile-title text-light">Usuario</div>
+    </div>
+    <div class="row row--align-v-center row--align-h-center">
+        <ul class="navList">
+            <li class="navList__heading">Documentos<i class="far fa-file-alt"></i></li>
+            <li data-url="../../graphics/heartRate/Index.html">
+                <a href="">
+                    <div class="navList__subheading row row--align-v-center">
+                        <span class="navList__subheading-icon"><i class="fa-solid fa-list"></i></span>
+                        <span class="navList__subheading-title">Ver todos los documentos</span>
+                    </div>
+                </a>
+            </li>
+            <li data-url="../../documents/add/add.html">
+                <div class="navList__subheading row row--align-v-center">
+                    <span class="navList__subheading-icon"><i class="fas fa-plane-departure"></i></span>
+                    <span class="navList__subheading-title">Agregar un documento</span>
+                </div>
+            </li>
+            <li data-url="../../documents/delete/delete.html">
+                <div class="navList__subheading row row--align-v-center">
+                    <span class="navList__subheading-icon"><i class="far fa-angry"></i></span>
+                    <span class="navList__subheading-title">Eliminar un Documento</span>
+                </div>
+            </li>
+            <li class="navList__heading">Historial de Métricas<i class="fas fa-heartbeat"></i></li>
+            <li>
+                <a href="../../graphics/heartRate/Index.html">
+                    <div class="navList__subheading row row--align-v-center">
+                        <span class="navList__subheading-icon"><i class="fas fa-heartbeat"></i></span>
+                        <span class="navList__subheading-title">Ritmo Cardiaco</span>
+                    </div>
+                </a>
+
+            </li>
+            <li>
+                <a href="../../graphics/temperature/index.html">
+
+                    <div class="navList__subheading row row--align-v-center">
+                        <span class="navList__subheading-icon"><i class="fas fa-heartbeat"></i></span>
+                        <span class="navList__subheading-title">Temperatura</span>
+                    </div>
+                </a>
+
+            </li>
+            <li>
+                <div class="navList__subheading row row--align-v-center">
+                    <span class="navList__subheading-icon"><i class="fas fa-heartbeat"></i></span>
+                    <span class="navList__subheading-title">Ubicación</span>
+                </div>
+
+            </li>
+        </ul>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.navList li[data-url]');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const url = item.getAttribute('data-url');
+                    if (url) {
+                        window.location.href = url;
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

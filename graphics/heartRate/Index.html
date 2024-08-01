@@ -8,11 +8,57 @@
     <link rel="stylesheet" href="./styles.css">
     <script src="https://code.highcharts.com/stock/highstock.js"></script>
     <script src="https://code.highcharts.com/modules/annotations.js"></script>
+    <link rel="stylesheet" href="../../dashboard/Main/Dashboard.css">
+    <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
+
 </head>
 
 <body>
-    <div id="container"></div>
+    <div class="grid">
+        <header class="header">
+            <header class="header">
+                <i class="fas fa-bars header__menu"></i>
+                <div class="header__search">
+                    <input class="header__input" placeholder="" />
+                </div>
+                <div class="header__avatar">
+                    <div class="dropdown">
+                        <ul class="dropdown__list">
+                            <li class="dropdown__list-item">
+                                <span class="dropdown__icon"><i class="far fa-user"></i></span>
+                                <span class="dropdown__title">my profile</span>
+                            </li>
+                            <li class="dropdown__list-item">
+                                <span class="dropdown__icon"><i class="fas fa-clipboard-list"></i></span>
+                                <span class="dropdown__title">my account</span>
+                            </li>
+                            <li class="dropdown__list-item">
+                                <span class="dropdown__icon"><i class="fas fa-sign-out-alt"></i></span>
+                                <span class="dropdown__title">log out</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </header>
+        </header>
+        <aside class="sidenav" id="aside-container">
+
+        </aside>
+        <main class="main" id="main">
+        </main>
+    </div>
     <script src="./script.js"></script>
+    <script>
+        // Función para cargar el contenido del aside
+        async function loadAsideContent(containerId) {
+            const response = await fetch('../../components/aside/aside.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
+
+        // Cargar el aside en diferentes contenedores
+        loadAsideContent('aside-container');
+    </script>
 </body>
 
 </html>

@@ -26,12 +26,12 @@ const connection = new signalR.HubConnectionBuilder()
   .build();
 
 connection.on("ReceiveLocationUpdate", (locationData) => {
-  console.log("Location update received:", locationData);
+  // console.log("Location update received:", locationData);
   updateMap([locationData]);
 });
 
 connection.on("ReceiveAllMetrics", (metricsData) => {
-  console.log("All metrics received:", metricsData);
+  // console.log("All metrics received:", metricsData);
 });
 
 connection
@@ -65,7 +65,7 @@ async function fetchUserProfile() {
     }
 
     const data = await response.json();
-    console.log("User profile:", data);
+    // console.log("User profile:", data);
 
     let userId;
     if (data.user_type === "admin") {
@@ -126,7 +126,7 @@ async function fetchUserProfile() {
 async function fetchAllUserMetrics() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  console.log("token", token);
+  // console.log("token", token);
   if (!token || !userId) {
     console.error("Token or User ID not found");
     redirectToLogin(); // Función para redirigir al usuario a la página de inicio de sesión
@@ -147,7 +147,7 @@ async function fetchAllUserMetrics() {
     }
 
     const data = await response.json();
-    console.log("All user metrics:", data);
+    // console.log("All user metrics:", data);
 
     if (data.length === 0) {
       console.warn("No metrics available to display");
@@ -247,7 +247,7 @@ function updateMetricsDOM(data) {
 async function fetchUserLocation() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  console.log("userId", userId);
+  // console.log("userId", userId);
 
   if (!token || !userId) {
     console.error("Token or User ID not found");
@@ -269,7 +269,7 @@ async function fetchUserLocation() {
     }
 
     const data = await response.json();
-    console.log("User Location:", data);
+    // console.log("User Location:", data);
 
     updateMap(data);
   } catch (error) {
@@ -378,7 +378,7 @@ async function fetchUserMedicalInfo() {
     }
 
     const data = await response.json();
-    console.log("User medical info:", data);
+    // console.log("User medical info:", data);
     fetchUserMedicalDocuments();
 
     // Aquí puedes manejar los datos recibidos y actualizar la UI
@@ -412,7 +412,7 @@ async function fetchAllUserAppointments() {
     }
 
     const data = await response.json();
-    console.log("All user appointments:", data);
+    // console.log("All user appointments:", data);
 
     // Llamar a la función para actualizar el DOM con las citas
     updateAppointmentsDOM(data);
@@ -445,7 +445,7 @@ async function fetchAllUserReminders() {
     }
 
     const data = await response.json();
-    console.log("All user reminders:", data);
+    // console.log("All user reminders:", data);
 
     // Llamar a la función para actualizar el DOM con los recordatorios
     updateRemindersDOM(data);
@@ -614,7 +614,7 @@ async function fetchUserMedicalDocuments() {
     }
 
     const data = await response.json();
-    console.log("User medical documents:", data);
+    // console.log("User medical documents:", data);
     renderDocuments(data);
   } catch (error) {
     console.error("Error fetching medical documents:", error.message);

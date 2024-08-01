@@ -12,6 +12,7 @@
 
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
@@ -38,7 +39,7 @@
         <header class="header">
             <i class="fas fa-bars header__menu"></i>
             <div class="header__search">
-                <input class="header__input" placeholder="Search..." />
+                <input class="header__input" placeholder="" />
             </div>
             <div class="header__avatar">
                 <div class="dropdown">
@@ -60,197 +61,8 @@
             </div>
         </header>
 
-        <aside class="sidenav">
-            <div class="sidenav__brand">
-                <!-- <i class="fas fa-feather-alt sidenav__brand-icon"></i> -->
-                <a class="sidenav__brand-link" href="#">Keep<span class="text-light">AnEye</span></a>
-                <i class="fas fa-times sidenav__brand-close"></i>
-            </div>
-            <div class="sidenav__profile">
-                <img src="../../images/logo.png" class="sidenav__profile-avatar"></img>
-                <div class="sidenav__profile-title text-light">Usuario</div>
-            </div>
-            <div class="row row--align-v-center row--align-h-center">
-                <ul class="navList">
-                    <li class="navList__heading">documentos<i class="far fa-file-alt"></i></li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-briefcase-medical"></i></span>
-                            <span class="navList__subheading-title">xxxx</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">xxxx</li>
-                            <li class="subList__item">xxxx</li>
-                            <li class="subList__item">xxxx</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-plane-departure"></i></span>
-                            <span class="navList__subheading-title">xxxx</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">xxxx</li>
-                            <li class="subList__item">xxxx</li>
-                            <li class="subList__item">xxxxx</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="far fa-angry"></i></span>
-                            <span class="navList__subheading-title">xxxxx</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">xxxxx</li>
-                            <li class="subList__item">xxxx</li>
-                        </ul>
-                    </li>
+        <aside class="sidenav" id="aside-container">
 
-                    <li class="navList__heading">Notificaciones<i class="far fa-envelope"></i></li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-envelope"></i></span>
-                            <span class="navList__subheading-title">xxxx<span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">xxxxx</li>
-                            <li class="subList__item">xxxx</li>
-                            <li class="subList__item">xxxxx</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-eye"></i></span>
-                            <span class="navList__subheading-title">xxxx</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">xxxx</li>
-                            <li class="subList__item">xxxxx</li>
-                            <li class="subList__item">xxxxx</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-book-open"></i></span>
-                            <span class="navList__subheading-title">xxxx</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">xxxx</li>
-                            <li class="subList__item">xxxxx</li>
-                            <li class="subList__item">xxxxx</li>
-                        </ul>
-                    </li>
-
-                    <!-- <li class="navList__heading">photo album<i class="far fa-image"></i></li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-mountain"></i></span>
-                            <span class="navList__subheading-title">vacation</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">cambodia</li>
-                            <li class="subList__item">new york</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-wine-glass-alt"></i></span>
-                            <span class="navList__subheading-title">anniversary</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">dive trip</li>
-                            <li class="subList__item">hikathon</li>
-                            <li class="subList__item">buffalo river</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-graduation-cap"></i></span>
-                            <span class="navList__subheading-title">university</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">wild horse saloon</li>
-                            <li class="subList__item">service corps</li>
-                            <li class="subList__item">graduation</li>
-                            <li class="subList__item">internships</li>
-                        </ul>
-                    </li>
-
-                    <li class="navList__heading">statistics<i class="fas fa-chart-bar"></i></li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-credit-card"></i></span>
-                            <span class="navList__subheading-title">finances</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">mortgage</li>
-                            <li class="subList__item">investments</li>
-                            <li class="subList__item">spend log</li>
-                            <li class="subList__item">owed</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-phone"></i></span>
-                            <span class="navList__subheading-title">call stats</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">last month</li>
-                            <li class="subList__item">bi-weekly</li>
-                            <li class="subList__item">yesterday</li>
-                            <li class="subList__item">today</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-plane"></i></span>
-                            <span class="navList__subheading-title">trip logs</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">amsterdam</li>
-                            <li class="subList__item">buenos aires</li>
-                            <li class="subList__item">cambodia</li>
-                            <li class="subList__item">greenland</li>
-                        </ul>
-                    </li>
-
-                    <li class="navList__heading">Events<i class="fas fa-calendar-alt"></i></li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-wine-glass-alt"></i></span>
-                            <span class="navList__subheading-title">weddings</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">past</li>
-                            <li class="subList__item">present</li>
-                            <li class="subList__item">future</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-school"></i></span>
-                            <span class="navList__subheading-title">playdates</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">weirdos</li>
-                            <li class="subList__item">smarties</li>
-                            <li class="subList__item">nerds</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <div class="navList__subheading row row--align-v-center">
-                            <span class="navList__subheading-icon"><i class="fas fa-users"></i></span>
-                            <span class="navList__subheading-title">networking</span>
-                        </div>
-                        <ul class="subList subList--hidden">
-                            <li class="subList__item">tech</li>
-                            <li class="subList__item">automotive</li>
-                            <li class="subList__item">UX research</li>
-                            <li class="subList__item">development</li>
-                        </ul>
-                    </li> -->
-                </ul>
-            </div>
         </aside>
 
         <main class="main">
@@ -462,7 +274,17 @@
     <!-- Incluir Leaflet.js -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script src="dashboard.js"></script>
+    <script>
+        // Función para cargar el contenido del aside
+        async function loadAsideContent(containerId) {
+            const response = await fetch('../../components/aside/aside.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
 
+        // Cargar el aside en diferentes contenedores
+        loadAsideContent('aside-container');
+    </script>
 </body>
 
 </html>
