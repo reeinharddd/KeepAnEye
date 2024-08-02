@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <link rel="stylesheet" href="Dashboard.css">
+    <script src="dashboard.js"></script>
+    <script src="Dashboard.js" defer></script>
+    <script src="../UserInfo/GeneralInfo.js" defer></script>
     <link rel="icon" type="image/jpg" href="../../images/logo.png" />
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
-
     <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@6.0.8/dist/browser/signalr.min.js"></script>
-
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="../UserInfo/GeneralInfo.js" defer></script>
-    <script src="Dashboard.js" defer></script>
-
     <title>KeepAnEye</title>
+
     <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
     <style>
         #map {
             width: 100%;
@@ -46,24 +47,22 @@
                     <ul class="dropdown__list">
                         <li class="dropdown__list-item">
                             <span class="dropdown__icon"><i class="far fa-user"></i></span>
-                            <span class="dropdown__title">my profile</span>
+                            <span class="dropdown__title">Mi perfil</span>
                         </li>
-                        <li class="dropdown__list-item">
+                        <!-- <li class="dropdown__list-item">
                             <span class="dropdown__icon"><i class="fas fa-clipboard-list"></i></span>
                             <span class="dropdown__title">my account</span>
-                        </li>
+                        </li> -->
                         <li class="dropdown__list-item">
                             <span class="dropdown__icon"><i class="fas fa-sign-out-alt"></i></span>
-                            <span class="dropdown__title">log out</span>
+                            <span class="dropdown__title">Log out</span>
                         </li>
                     </ul>
                 </div>
             </div>
         </header>
 
-        <aside class="sidenav" id="aside-container">
-
-        </aside>
+        <aside class="sidenav" id="aside-container"></aside>
 
         <main class="main">
             <div class="main-header">
@@ -142,12 +141,12 @@
             <div class="card card--finance">
                 <div class="card__header">
                     <div class="card__header-title text-light">Mapa <strong>En tiempo real</strong>
-                        <a href="#" class="card__header-link text-bold">View All</a>
+                        <!-- <a href="#" class="card__header-link text-bold">View All</a> -->
                     </div>
-                    <div class="settings">
+                    <!-- <div class="settings">
                         <div class="settings__block"><i class="fas fa-edit"></i></div>
                         <div class="settings__block"><i class="fas fa-cog"></i></div>
-                    </div>
+                    </div> -->
                 </div>
                 <div id="chartdiv">
                     <div id="map"></div>
@@ -158,12 +157,12 @@
                 <div class="card">
                     <div class="card__header">
                         <div class="card__header-title text-light">Siguientes <strong>eventos</strong>
-                            <a href="#" class="card__header-link text-bold">View All</a>
+                            <a href="#" class="card__header-link text-bold"> Ver todos</a>
                         </div>
-                        <div class="settings">
+                        <!-- <div class="settings">
                             <div class="settings__block"><i class="fas fa-edit"></i></div>
                             <div class="settings__block"><i class="fas fa-cog"></i></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card__main">
                         <!-- <div class="card__row">
@@ -230,35 +229,16 @@
                 <div class="card">
                     <div class="card__header">
                         <div class="card__header-title text-light">Documentos <strong>recientes</strong>
-                            <a href="#" class="card__header-link text-bold">View All</a>
+                            <a href="#" class="card__header-link text-bold"> Ver todos</a>
                         </div>
-                        <div class="settings">
+                        <!-- <div class="settings">
                             <div class="settings__block"><i class="fas fa-edit"></i></div>
                             <div class="settings__block"><i class="fas fa-cog"></i></div>
-                        </div>
+                        </div> -->
                     </div>
                     <div class="card">
                         <div class="documents">
-                            <!-- <div class="document">
-                                <div class="document__img"></div>
-                                <div class="document__title">tesla-patents</div>
-                                <div class="document__date">07/16/2018</div>
-                            </div>
-                            <div class="document">
-                                <div class="document__img"></div>
-                                <div class="document__title">yearly-budget</div>
-                                <div class="document__date">09/04/2018</div>
-                            </div>
-                            <div class="document">
-                                <div class="document__img"></div>
-                                <div class="document__title">top-movies</div>
-                                <div class="document__date">10/10/2018</div>
-                            </div>
-                            <div class="document">
-                                <div class="document__img"></div>
-                                <div class="document__title">trip-itinerary</div>
-                                <div class="document__date">11/01/2018</div>
-                            </div> -->
+
                         </div>
                     </div>
                 </div>
@@ -267,13 +247,11 @@
 
         <footer class="footer">
             <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
-            <p>Crafted with <i class="fas fa-heart footer__icon"></i> </p>
+            <p> <i class="fas fa-heart footer__icon"></i> </p>
         </footer>
     </div>
 
     <!-- Incluir Leaflet.js -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script src="dashboard.js"></script>
     <script>
         // Función para cargar el contenido del aside
         async function loadAsideContent(containerId) {

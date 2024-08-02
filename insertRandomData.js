@@ -14,14 +14,22 @@ async function main() {
   try {
     await client.connect();
     const database = client.db("KeepAnEyeDb");
-    const collection = database.collection("metrics");
+    const collection = database.collection("appointments");
 
-    const patientId = new ObjectId("668870df0083589ac85aee37");
+    const patientId = "66a833b635e5f07146b7e66b"; // patient_id como string
     const numberOfEntries = 100; // Número de entradas a generar
 
+    // Fecha actual
+    const today = new Date();
+
     const generateRandomData = () => {
-      const startDate = new Date(2024, 0, 1); // Fecha de inicio (1 de enero de 2024)
-      const endDate = new Date(2024, 6, 31); // Fecha de fin (31 de julio de 2024)
+      // Definir el rango de fechas a partir del día de hoy
+      const startDate = today;
+      const endDate = new Date(
+        today.getFullYear(),
+        today.getMonth() + 6,
+        today.getDate()
+      ); // 6 meses después del día de hoy
 
       const getRandomDate = (start, end) => {
         return new Date(
@@ -32,41 +40,37 @@ async function main() {
       const data = [];
 
       for (let i = 0; i < numberOfEntries; i++) {
-        const timestamp = getRandomDate(startDate, endDate);
+        const date = getRandomDate(startDate, endDate);
+        const time = faker.date
+          .between(
+            new Date(date.setHours(0, 0, 0, 0)),
+            new Date(date.setHours(23, 59, 59, 999))
+          )
+          .toTimeString()
+          .split(" ")[0]; // Hora aleatoria durante el día
+
         data.push({
-          timestamp: timestamp,
-          value: faker.datatype.number({ min: 60, max: 100 }), // Ritmo cardíaco aleatorio entre 60 y 100
-          _id: new ObjectId(),
+          date: date.toISOString(), // Convertir a formato ISO
+          time: time,
+          place: faker.address.streetAddress(), // Lugar aleatorio
         });
       }
 
       return data;
     };
 
-    const heartRateData = generateRandomData();
-    const temperatureData = generateRandomData().map((entry) => ({
-      ...entry,
-      value: faker.datatype.float({ min: 35.5, max: 37.5 }), // Temperatura aleatoria entre 35.5 y 37.5
-    }));
-    const locationData = generateRandomData().map((entry) => ({
-      ...entry,
-      coordinates: {
-        latitude: parseFloat(faker.address.latitude()),
-        longitude: parseFloat(faker.address.longitude()),
-      },
-    }));
+    const appointmentData = generateRandomData();
 
-    const update = {
-      $push: {
-        heartRate: { $each: heartRateData },
-        temperature: { $each: temperatureData },
-        location: { $each: locationData },
-      },
-    };
+    // Vaciar la colección
+    await collection.deleteMany({});
 
-    await collection.updateOne({ patient_id: patientId }, update);
+    // Insertar los datos en un solo documento
+    await collection.insertOne({
+      patient_id: patientId,
+      appointments: appointmentData,
+    });
 
-    console.log("Datos insertados exitosamente");
+    console.log("Datos de citas insertados exitosamente en un solo documento");
   } catch (error) {
     console.error("Error al insertar datos:", error);
   } finally {

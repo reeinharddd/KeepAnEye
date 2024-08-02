@@ -412,7 +412,8 @@ async function fetchAllUserAppointments() {
     }
 
     const data = await response.json();
-    // console.log("All user appointments:", data);
+    console.log("All user appointments:", data);
+    console.log("test", data[0].appointments[0]);
 
     // Llamar a la función para actualizar el DOM con las citas
     updateAppointmentsDOM(data);
@@ -464,15 +465,21 @@ function updateAppointmentsDOM(appointments) {
 
   // Obtener la fecha y hora actual
   const now = new Date();
+  console.log("Fecha actual:", now);
 
   // Filtrar las citas para excluir las anteriores a la fecha y hora actual
-  const filteredAppointments = appointments.filter((appointment) => {
-    const appointmentDate = new Date(appointment.date);
-    return appointmentDate >= now;
-  });
+  const filteredAppointments = appointments.flatMap((item) =>
+    item.appointments.filter((appointment) => {
+      const appointmentDate = new Date(appointment.date);
+      const isPending = appointment.status === "Pending";
+      return appointmentDate >= now && isPending;
+    })
+  );
+
+  console.log("Filtered Appointments", filteredAppointments);
 
   // Ordenar las citas filtradas por fecha en orden descendente
-  filteredAppointments.sort((a, b) => new Date(b.date) - new Date(a.date));
+  filteredAppointments.sort((a, b) => new Date(a.date) - new Date(b.date));
 
   // Limitar a 5 citas
   const limitedAppointments = filteredAppointments.slice(0, 5);
@@ -484,30 +491,40 @@ function updateAppointmentsDOM(appointments) {
     const appointmentElement = document.createElement("div");
     appointmentElement.classList.add("card__row");
 
+    // Crear el icono de la cita
     const iconElement = document.createElement("div");
     iconElement.classList.add("card__icon");
     iconElement.innerHTML = '<i class="fas fa-calendar-alt"></i>';
 
+    // Crear el elemento de fecha y hora
     const timeElement = document.createElement("div");
     timeElement.classList.add("card__time");
     timeElement.innerHTML = `<div>${new Date(
       appointment.date
-    ).toLocaleDateString()}</div>`;
+    ).toLocaleDateString()} ${new Date(
+      appointment.date
+    ).toLocaleTimeString()}</div>`;
 
+    // Crear el elemento de detalles
     const detailElement = document.createElement("div");
     detailElement.classList.add("card__detail");
 
     const sourceElement = document.createElement("div");
     sourceElement.classList.add("card__source", "text-bold");
-    sourceElement.textContent = `${appointment.place}`;
+    sourceElement.textContent = appointment.place
+      ? appointment.place
+      : "No place provided";
 
     const descriptionElement = document.createElement("div");
     descriptionElement.classList.add("card__description");
-    descriptionElement.textContent = `Time: ${appointment.time}`;
+    descriptionElement.textContent = appointment.time
+      ? `Time: ${appointment.time}`
+      : "No time provided";
 
     const noteElement = document.createElement("div");
     noteElement.classList.add("card__note");
-    // noteElement.textContent = `Patient ID: ${appointment.patientId}`;
+    // Añadir detalles adicionales si están disponibles
+    // noteElement.textContent = appointment.patientId ? `Patient ID: ${appointment.patientId}` : "No patient ID provided";
 
     detailElement.appendChild(sourceElement);
     detailElement.appendChild(descriptionElement);
