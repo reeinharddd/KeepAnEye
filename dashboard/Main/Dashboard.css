@@ -727,3 +727,18 @@ a {
     align-items: flex-start;
   }
 }
+
+.mark-complete-button {
+  background-color: #00a696;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+
+.mark-complete-button:hover {
+  background-color: #008c8c;
+}

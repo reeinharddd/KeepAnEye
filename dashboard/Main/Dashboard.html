@@ -37,8 +37,8 @@
     <div id="userData"></div>
 
     <div class="grid">
-        <header class="header">
-            <i class="fas fa-bars header__menu"></i>
+        <header class="header" id="header-container">
+            <!-- <i class="fas fa-bars header__menu"></i>
             <div class="header__search">
                 <input class="header__input" placeholder="" />
             </div>
@@ -48,18 +48,18 @@
                         <li class="dropdown__list-item">
                             <span class="dropdown__icon"><i class="far fa-user"></i></span>
                             <span class="dropdown__title">Mi perfil</span>
-                        </li>
-                        <!-- <li class="dropdown__list-item">
+                        </li> -->
+            <!-- <li class="dropdown__list-item">
                             <span class="dropdown__icon"><i class="fas fa-clipboard-list"></i></span>
                             <span class="dropdown__title">my account</span>
                         </li> -->
-                        <li class="dropdown__list-item">
+            <!-- <li class="dropdown__list-item">
                             <span class="dropdown__icon"><i class="fas fa-sign-out-alt"></i></span>
                             <span class="dropdown__title">Log out</span>
                         </li>
                     </ul>
                 </div>
-            </div>
+            </div> -->
         </header>
 
         <aside class="sidenav" id="aside-container"></aside>
@@ -229,7 +229,7 @@
                 <div class="card">
                     <div class="card__header">
                         <div class="card__header-title text-light">Documentos <strong>recientes</strong>
-                            <a href="#" class="card__header-link text-bold"> Ver todos</a>
+                            <a href="../../documents/show/all.html" class="card__header-link text-bold"> Ver todos</a>
                         </div>
                         <!-- <div class="settings">
                             <div class="settings__block"><i class="fas fa-edit"></i></div>
@@ -259,9 +259,16 @@
             const asideContent = await response.text();
             document.getElementById(containerId).innerHTML = asideContent;
         }
+        async function loadHeaderContent(containerId) {
+            const response = await fetch('../../components/header/header.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
 
         // Cargar el aside en diferentes contenedores
         loadAsideContent('aside-container');
+        loadHeaderContent('header-container');
+
     </script>
 </body>
 

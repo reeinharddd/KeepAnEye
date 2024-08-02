@@ -413,7 +413,7 @@ async function fetchAllUserAppointments() {
 
     const data = await response.json();
     console.log("All user appointments:", data);
-    console.log("test", data[0].appointments[0]);
+    // console.log("test", data[0].appointments[0]);
 
     // Llamar a la función para actualizar el DOM con las citas
     updateAppointmentsDOM(data);
@@ -421,7 +421,149 @@ async function fetchAllUserAppointments() {
     console.error("Error fetching all user appointments:", error.message);
   }
 }
+// Función para actualizar el DOM con las citas
+function updateAppointmentsDOM(appointments) {
+  const container = document.getElementById("appointmentsContainer");
+  if (!container) {
+    console.error("Appointments container not found");
+    return;
+  }
 
+  console.log("appoints antes de filteredAppointments", appointments);
+
+  const now = new Date();
+
+  const filteredAppointments = appointments.flatMap((item) =>
+    item.appointments
+      .map((appointment) => ({
+        ...appointment,
+        appointmentId: item.id, // Incluye el ID del item en el objeto appointment
+      }))
+      .filter((appointment) => {
+        const appointmentDate = new Date(appointment.date);
+        const isPending = appointment.status === "Pending";
+        console.log("appoints antes de durante", appointment);
+
+        return appointmentDate >= now && isPending;
+      })
+  );
+
+  filteredAppointments.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const limitedAppointments = filteredAppointments.slice(0, 5);
+
+  container.innerHTML = "";
+
+  limitedAppointments.forEach((appointment, index) => {
+    const appointmentElement = document.createElement("div");
+    appointmentElement.classList.add("card__row");
+
+    const iconElement = document.createElement("div");
+    iconElement.classList.add("card__icon");
+    iconElement.innerHTML = '<i class="fas fa-calendar-alt"></i>';
+
+    const timeElement = document.createElement("div");
+    timeElement.classList.add("card__time");
+    timeElement.innerHTML = `<div>${new Date(
+      appointment.date
+    ).toLocaleDateString()} ${new Date(
+      appointment.date
+    ).toLocaleTimeString()}</div>`;
+
+    const detailElement = document.createElement("div");
+    detailElement.classList.add("card__detail");
+
+    const sourceElement = document.createElement("div");
+    sourceElement.classList.add("card__source", "text-bold");
+    sourceElement.textContent = appointment.place
+      ? appointment.place
+      : "No place provided";
+
+    const descriptionElement = document.createElement("div");
+    descriptionElement.classList.add("card__description");
+    descriptionElement.textContent = appointment.time
+      ? `Time: ${appointment.time}`
+      : "No time provided";
+
+    const noteElement = document.createElement("div");
+    noteElement.classList.add("card__note");
+
+    detailElement.appendChild(sourceElement);
+    detailElement.appendChild(descriptionElement);
+    detailElement.appendChild(noteElement);
+
+    const completeButton = document.createElement("button");
+    completeButton.textContent = "Marcar como completado";
+    completeButton.classList.add("mark-complete-button");
+    completeButton.addEventListener("click", async () => {
+      console.log("Mark as complete clicked");
+      console.log("Appointment:", appointment);
+      await markAppointmentAsComplete(appointment, index);
+    });
+
+    detailElement.appendChild(completeButton);
+
+    appointmentElement.appendChild(iconElement);
+    appointmentElement.appendChild(timeElement);
+    appointmentElement.appendChild(detailElement);
+
+    container.appendChild(appointmentElement);
+  });
+}
+
+// Función para marcar una cita como completa
+async function markAppointmentAsComplete(appointment, index) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token not found");
+    redirectToLogin();
+    return;
+  }
+
+  if (!appointment.appointmentId) {
+    console.error("Appointment ID not found");
+    return;
+  }
+
+  // Asegúrate de que el appointment tenga el formato esperado
+  const updatedAppointment = {
+    id: appointment.appointmentId, // El ID de la cita
+    PatientId: localStorage.getItem("userId"), // Asegúrate de que el PatientId sea el ID del paciente
+    Appointments: [
+      {
+        Date: appointment.date, // Fecha en formato ISO 8601
+        Time: appointment.time,
+        Place: appointment.place,
+        Status: "Completed", // Cambia el estado a "Completed"
+      },
+    ],
+  };
+
+  try {
+    const response = await fetch(
+      `${apiUrl}/appointment/${appointment.appointmentId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(updatedAppointment),
+      }
+    );
+
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(
+        `Failed to update appointment: ${response.statusText} - ${errorDetails}`
+      );
+    }
+
+    fetchAllUserAppointments();
+  } catch (error) {
+    console.error("Error marking appointment as complete:", error.message);
+  }
+}
 // Función para obtener todos los recordatorios del usuario
 async function fetchAllUserReminders() {
   const token = localStorage.getItem("token");
@@ -446,96 +588,13 @@ async function fetchAllUserReminders() {
     }
 
     const data = await response.json();
-    // console.log("All user reminders:", data);
+    console.log("All user reminders:", data);
 
     // Llamar a la función para actualizar el DOM con los recordatorios
     updateRemindersDOM(data);
   } catch (error) {
     console.error("Error fetching all user reminders:", error.message);
   }
-}
-
-// Función para actualizar el DOM con las citas
-function updateAppointmentsDOM(appointments) {
-  const container = document.getElementById("appointmentsContainer");
-  if (!container) {
-    console.error("Appointments container not found");
-    return;
-  }
-
-  // Obtener la fecha y hora actual
-  const now = new Date();
-  console.log("Fecha actual:", now);
-
-  // Filtrar las citas para excluir las anteriores a la fecha y hora actual
-  const filteredAppointments = appointments.flatMap((item) =>
-    item.appointments.filter((appointment) => {
-      const appointmentDate = new Date(appointment.date);
-      const isPending = appointment.status === "Pending";
-      return appointmentDate >= now && isPending;
-    })
-  );
-
-  console.log("Filtered Appointments", filteredAppointments);
-
-  // Ordenar las citas filtradas por fecha en orden descendente
-  filteredAppointments.sort((a, b) => new Date(a.date) - new Date(b.date));
-
-  // Limitar a 5 citas
-  const limitedAppointments = filteredAppointments.slice(0, 5);
-
-  // Limpiar el contenedor antes de añadir nuevos elementos
-  container.innerHTML = "";
-
-  limitedAppointments.forEach((appointment) => {
-    const appointmentElement = document.createElement("div");
-    appointmentElement.classList.add("card__row");
-
-    // Crear el icono de la cita
-    const iconElement = document.createElement("div");
-    iconElement.classList.add("card__icon");
-    iconElement.innerHTML = '<i class="fas fa-calendar-alt"></i>';
-
-    // Crear el elemento de fecha y hora
-    const timeElement = document.createElement("div");
-    timeElement.classList.add("card__time");
-    timeElement.innerHTML = `<div>${new Date(
-      appointment.date
-    ).toLocaleDateString()} ${new Date(
-      appointment.date
-    ).toLocaleTimeString()}</div>`;
-
-    // Crear el elemento de detalles
-    const detailElement = document.createElement("div");
-    detailElement.classList.add("card__detail");
-
-    const sourceElement = document.createElement("div");
-    sourceElement.classList.add("card__source", "text-bold");
-    sourceElement.textContent = appointment.place
-      ? appointment.place
-      : "No place provided";
-
-    const descriptionElement = document.createElement("div");
-    descriptionElement.classList.add("card__description");
-    descriptionElement.textContent = appointment.time
-      ? `Time: ${appointment.time}`
-      : "No time provided";
-
-    const noteElement = document.createElement("div");
-    noteElement.classList.add("card__note");
-    // Añadir detalles adicionales si están disponibles
-    // noteElement.textContent = appointment.patientId ? `Patient ID: ${appointment.patientId}` : "No patient ID provided";
-
-    detailElement.appendChild(sourceElement);
-    detailElement.appendChild(descriptionElement);
-    detailElement.appendChild(noteElement);
-
-    appointmentElement.appendChild(iconElement);
-    appointmentElement.appendChild(timeElement);
-    appointmentElement.appendChild(detailElement);
-
-    container.appendChild(appointmentElement);
-  });
 }
 
 // Función para actualizar el DOM con los recordatorios
@@ -546,25 +605,22 @@ function updateRemindersDOM(reminders) {
     return;
   }
 
-  // Obtener la fecha y hora actual
+  console.log("reminders antes de filteredReminders", reminders);
+
   const now = new Date();
 
-  // Filtrar los recordatorios para excluir los anteriores a la fecha y hora actual
-  const filteredReminders = reminders.filter((reminder) => {
-    const reminderDate = new Date(reminder.date);
-    return reminderDate >= now;
-  });
+  const filteredReminders = reminders
+    .filter((reminder) => {
+      const reminderDate = new Date(reminder.date);
+      const isPending = reminder.status === "Pending";
+      return reminderDate >= now && isPending;
+    })
+    .sort((a, b) => new Date(a.date) - new Date(b.date))
+    .slice(0, 5);
 
-  // Ordenar los recordatorios filtrados por fecha en orden descendente
-  filteredReminders.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  // Limitar a 5 recordatorios
-  const limitedReminders = filteredReminders.slice(0, 5);
-
-  // Limpiar el contenedor antes de añadir nuevos elementos
   container.innerHTML = "";
 
-  limitedReminders.forEach((reminder) => {
+  filteredReminders.forEach((reminder, index) => {
     const reminderElement = document.createElement("div");
     reminderElement.classList.add("card__row");
 
@@ -576,26 +632,42 @@ function updateRemindersDOM(reminders) {
     timeElement.classList.add("card__time");
     timeElement.innerHTML = `<div>${new Date(
       reminder.date
-    ).toLocaleDateString()}</div>`;
+    ).toLocaleDateString()} ${new Date(
+      reminder.date
+    ).toLocaleTimeString()}</div>`;
 
     const detailElement = document.createElement("div");
     detailElement.classList.add("card__detail");
 
     const sourceElement = document.createElement("div");
     sourceElement.classList.add("card__source", "text-bold");
-    sourceElement.textContent = reminder.title || "No Title";
+    sourceElement.textContent = reminder.title
+      ? reminder.title
+      : "No title provided";
 
     const descriptionElement = document.createElement("div");
     descriptionElement.classList.add("card__description");
-    descriptionElement.textContent = reminder.description || "No Description";
+    descriptionElement.textContent = reminder.description
+      ? reminder.description
+      : "No description provided";
 
     const noteElement = document.createElement("div");
     noteElement.classList.add("card__note");
-    noteElement.textContent = reminder.date;
 
     detailElement.appendChild(sourceElement);
     detailElement.appendChild(descriptionElement);
     detailElement.appendChild(noteElement);
+
+    const completeButton = document.createElement("button");
+    completeButton.textContent = "Marcar como completado";
+    completeButton.classList.add("mark-complete-button");
+    completeButton.addEventListener("click", async () => {
+      console.log("Mark as complete clicked");
+      console.log("Reminder:", reminder);
+      await markReminderAsComplete(reminder, index);
+    });
+
+    detailElement.appendChild(completeButton);
 
     reminderElement.appendChild(iconElement);
     reminderElement.appendChild(timeElement);
@@ -603,6 +675,52 @@ function updateRemindersDOM(reminders) {
 
     container.appendChild(reminderElement);
   });
+}
+async function markReminderAsComplete(reminder, index) {
+  const token = localStorage.getItem("token");
+  if (!token) {
+    console.error("Token not found");
+    redirectToLogin();
+    return;
+  }
+
+  if (!reminder.id) {
+    console.error("Reminder ID not found");
+    return;
+  }
+
+  // Asegúrate de que el reminder tenga el formato esperado
+  const updatedReminder = {
+    id: reminder.id, // El ID del recordatorio
+    userToRemind: localStorage.getItem("userId"), // Asegúrate de que userToRemind sea el ID del usuario
+    title: reminder.title,
+    description: reminder.description,
+    date: reminder.date,
+    status: "Completed", // Cambia el estado a "Completed"
+  };
+
+  try {
+    const response = await fetch(`${apiUrl}/reminder/${reminder.id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify(updatedReminder),
+    });
+
+    if (!response.ok) {
+      const errorDetails = await response.text();
+      throw new Error(
+        `Failed to update reminder: ${response.statusText} - ${errorDetails}`
+      );
+    }
+
+    // Actualiza la lista de recordatorios después de la actualización
+    fetchAllUserReminders();
+  } catch (error) {
+    console.error("Error marking reminder as complete:", error.message);
+  }
 }
 
 //Obtener todos los documentos de un usurio
@@ -631,7 +749,7 @@ async function fetchUserMedicalDocuments() {
     }
 
     const data = await response.json();
-    // console.log("User medical documents:", data);
+    console.log("User medical documents:", data);
     renderDocuments(data);
   } catch (error) {
     console.error("Error fetching medical documents:", error.message);
@@ -647,7 +765,7 @@ function getMimeTypeImage(mimeType) {
       return "../../images/word.png"; // Ruta a la imagen del ícono Word
     // Agrega más casos según los tipos MIME que necesites manejar
     default:
-      return "../../images/css.png"; // Ruta a la imagen por defecto
+      return "../../images/pdf.png"; // Ruta a la imagen por defecto
   }
 }
 
@@ -661,6 +779,10 @@ function renderDocuments(documents) {
   documents.slice(0, 4).forEach((doc) => {
     const documentElement = document.createElement("div");
     documentElement.classList.add("document");
+
+    const anchorElement = document.createElement("a");
+    anchorElement.href = doc.url; // Establece la URL del documento
+    anchorElement.target = "_blank"; // Abre el enlace en una nueva pestaña
 
     const documentImg = document.createElement("div");
     documentImg.classList.add("document__img");
@@ -679,7 +801,8 @@ function renderDocuments(documents) {
       date.getMonth() + 1
     }/${date.getDate()}/${date.getFullYear()}`;
 
-    documentElement.appendChild(documentImg);
+    anchorElement.appendChild(documentImg);
+    documentElement.appendChild(anchorElement);
     documentElement.appendChild(documentTitle);
     documentElement.appendChild(documentDate);
 

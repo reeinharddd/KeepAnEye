@@ -15,31 +15,8 @@
 
 <body>
     <div class="grid">
-        <header class="header">
-            <header class="header">
-                <i class="fas fa-bars header__menu"></i>
-                <div class="header__search">
-                    <input class="header__input" placeholder="" />
-                </div>
-                <div class="header__avatar">
-                    <div class="dropdown">
-                        <ul class="dropdown__list">
-                            <li class="dropdown__list-item">
-                                <span class="dropdown__icon"><i class="far fa-user"></i></span>
-                                <span class="dropdown__title">my profile</span>
-                            </li>
-                            <li class="dropdown__list-item">
-                                <span class="dropdown__icon"><i class="fas fa-clipboard-list"></i></span>
-                                <span class="dropdown__title">my account</span>
-                            </li>
-                            <li class="dropdown__list-item">
-                                <span class="dropdown__icon"><i class="fas fa-sign-out-alt"></i></span>
-                                <span class="dropdown__title">log out</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </header>
+        <header class="header" id="header-container">
+
         </header>
         <aside class="sidenav" id="aside-container">
 
@@ -55,9 +32,16 @@
             const asideContent = await response.text();
             document.getElementById(containerId).innerHTML = asideContent;
         }
+        async function loadHeaderContent(containerId) {
+            const response = await fetch('../../components/header/header.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
 
         // Cargar el aside en diferentes contenedores
         loadAsideContent('aside-container');
+        loadHeaderContent('header-container');
+
     </script>
 </body>
 
