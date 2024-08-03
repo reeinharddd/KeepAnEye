@@ -110,62 +110,71 @@
                     </div>
                 </div>
                 <div class="overviewCard">
-                    <div class="overviewCard-icon overviewCard-icon--calendar">
-                        <i class="far fa-calendar-check"></i>
-                    </div>
-                    <div class="overviewCard-description">
-                        <h3 class="overviewCard-title text-light">Agregar <strong>evento</strong></h3>
-                        <p class="overviewCard-subtitle"></p>
-                    </div>
-                </div>
-                <div class="overviewCard">
-                    <div class="overviewCard-icon overviewCard-icon--mail">
-                        <i class="far fa-envelope"></i>
-                    </div>
-                    <div class="overviewCard-description">
-                        <h3 class="overviewCard-title text-light">Notificaciones <strong>Recientes</strong></h3>
-                        <p class="overviewCard-subtitle">+10</p>
-                    </div>
-                </div>
-                <div class="overviewCard">
-                    <div class="overviewCard-icon overviewCard-icon--photo">
-                        <i class="far fa-file-image"></i>
-                    </div>
-                    <div class="overviewCard-description">
-                        <h3 class="overviewCard-title text-light">Extras <strong></strong></h3>
-                        <p class="overviewCard-subtitle"></p>
-                    </div>
-                </div>
-            </div> <!-- /.main__overview -->
+                    <a href="../../forms/appointments/form.html">
 
-            <div class="card card--finance">
-                <div class="card__header">
-                    <div class="card__header-title text-light">Mapa <strong>En tiempo real</strong>
-                        <!-- <a href="#" class="card__header-link text-bold">View All</a> -->
-                    </div>
-                    <!-- <div class="settings">
+                        <div class="overviewCard-icon overviewCard-icon--calendar">
+                            <i class="far fa-calendar-check"></i>
+                        </div>
+
+                        <div class="overviewCard-description">
+                            <h3 class="overviewCard-title text-light">Agregar <strong>Cita</strong></h3>
+                            <p class="overviewCard-subtitle"></p>
+                        </div>
+                    </a>
+
+                </div>
+                <div class="overviewCard">
+                    <a href="../../forms/reminders/form.html">
+
+                        <div class="overviewCard-icon overviewCard-icon--mail">
+                            <i class="fa-sharp fa-regular fa-bell"></i>
+                        </div>
+                        <div class="overviewCard-description">
+
+                            <h3 class="overviewCard-title text-light">Nuevo <strong>Recordatorio</strong></h3>
+                            <p class="overviewCard-subtitle"></p>
+                    </a>
+                </div>
+            </div>
+            <div class="overviewCard">
+                <div class="overviewCard-icon overviewCard-icon--photo">
+                    <i class="far fa-file-image"></i>
+                </div>
+                <div class="overviewCard-description">
+                    <h3 class="overviewCard-title text-light">Extras <strong></strong></h3>
+                    <p class="overviewCard-subtitle"></p>
+                </div>
+            </div>
+    </div> <!-- /.main__overview -->
+
+    <div class="card card--finance">
+        <div class="card__header">
+            <div class="card__header-title text-light">Mapa <strong>En tiempo real</strong>
+                <!-- <a href="#" class="card__header-link text-bold">View All</a> -->
+            </div>
+            <!-- <div class="settings">
                         <div class="settings__block"><i class="fas fa-edit"></i></div>
                         <div class="settings__block"><i class="fas fa-cog"></i></div>
                     </div> -->
-                </div>
-                <div id="chartdiv">
-                    <div id="map"></div>
+        </div>
+        <div id="chartdiv">
+            <div id="map"></div>
 
+        </div>
+    </div>
+    <div class="main__cards">
+        <div class="card">
+            <div class="card__header">
+                <div class="card__header-title text-light">Siguientes <strong>eventos</strong>
+                    <a href="#" class="card__header-link text-bold"> Ver todos</a>
                 </div>
-            </div>
-            <div class="main__cards">
-                <div class="card">
-                    <div class="card__header">
-                        <div class="card__header-title text-light">Siguientes <strong>eventos</strong>
-                            <a href="#" class="card__header-link text-bold"> Ver todos</a>
-                        </div>
-                        <!-- <div class="settings">
+                <!-- <div class="settings">
                             <div class="settings__block"><i class="fas fa-edit"></i></div>
                             <div class="settings__block"><i class="fas fa-cog"></i></div>
                         </div> -->
-                    </div>
-                    <div class="card__main">
-                        <!-- <div class="card__row">
+            </div>
+            <div class="card__main">
+                <!-- <div class="card__row">
                             <div class="card__icon"><i class="fas fa-gift"></i></div>
                             <div class="card__time">
                                 <div>today</div>
@@ -222,33 +231,33 @@
                                 <div class="card__note">11:00pm, Jacksonville Airforce Base</div>
                             </div>
                         </div> -->
-                    </div>
-                    <div class="card__main" id="appointmentsContainer"></div>
-                    <div class="card__main" id="remindersContainer"></div>
+            </div>
+            <div class="card__main" id="appointmentsContainer"></div>
+            <div class="card__main" id="remindersContainer"></div>
+        </div>
+        <div class="card">
+            <div class="card__header">
+                <div class="card__header-title text-light">Documentos <strong>recientes</strong>
+                    <a href="../../documents/show/all.html" class="card__header-link text-bold"> Ver todos</a>
                 </div>
-                <div class="card">
-                    <div class="card__header">
-                        <div class="card__header-title text-light">Documentos <strong>recientes</strong>
-                            <a href="../../documents/show/all.html" class="card__header-link text-bold"> Ver todos</a>
-                        </div>
-                        <!-- <div class="settings">
+                <!-- <div class="settings">
                             <div class="settings__block"><i class="fas fa-edit"></i></div>
                             <div class="settings__block"><i class="fas fa-cog"></i></div>
                         </div> -->
-                    </div>
-                    <div class="card">
-                        <div class="documents">
+            </div>
+            <div class="card">
+                <div class="documents">
 
-                        </div>
-                    </div>
                 </div>
-            </div> <!-- /.main-cards -->
-        </main>
+            </div>
+        </div>
+    </div> <!-- /.main-cards -->
+    </main>
 
-        <footer class="footer">
-            <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
-            <p> <i class="fas fa-heart footer__icon"></i> </p>
-        </footer>
+    <footer class="footer">
+        <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
+        <p> <i class="fas fa-heart footer__icon"></i> </p>
+    </footer>
     </div>
 
     <!-- Incluir Leaflet.js -->

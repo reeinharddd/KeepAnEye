@@ -462,13 +462,24 @@ function updateAppointmentsDOM(appointments) {
     iconElement.classList.add("card__icon");
     iconElement.innerHTML = '<i class="fas fa-calendar-alt"></i>';
 
+    const appointmentDate = new Date(appointment.date);
+    const currentDate = new Date();
+
+    // Calcular los días restantes
+    const timeDiff = appointmentDate.getTime() - currentDate.getTime();
+    const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    // Crear el elemento para mostrar la fecha y los días restantes
     const timeElement = document.createElement("div");
     timeElement.classList.add("card__time");
-    timeElement.innerHTML = `<div>${new Date(
-      appointment.date
-    ).toLocaleDateString()} ${new Date(
-      appointment.date
-    ).toLocaleTimeString()}</div>`;
+    timeElement.innerHTML = `
+  <div>
+    Fecha: ${appointmentDate.toLocaleDateString()}
+  </div>
+  <div>
+    Días restantes: ${daysRemaining}
+  </div>
+`;
 
     const detailElement = document.createElement("div");
     detailElement.classList.add("card__detail");
