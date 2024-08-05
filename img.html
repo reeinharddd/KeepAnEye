@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subida de Imágenes a S3</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        #uploadForm {
+            margin-top: 20px;
+        }
+
+        #responseMessage {
+            margin-top: 20px;
+            color: #ff0000;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Subir Imagen a Amazon S3</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file" accept="image/jpeg" required />
+        <button type="submit">Subir Imagen</button>
+    </form>
+    <p id="responseMessage"></p>
+    <script>
+        document.getElementById('uploadForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            const formData = new FormData();
+            formData.append('ProfilePhoto', file); // Cambiado de 'file' a 'ProfilePhoto'
+
+            fetch('http://localhost:5123/api/user/upload-photo', {
+                method: 'POST',
+                body: formData
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('responseMessage').innerText = `Archivo cargado con éxito: ${data.url}`;
+                })
+                .catch(error => {
+                    document.getElementById('responseMessage').innerText = `Error al cargar el archivo: ${error.message}`;
+                });
+
+        });
+
+    </script>
+</body>
+
+</html>

@@ -126,7 +126,7 @@ async function fetchUserProfile() {
 async function fetchAllUserMetrics() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  // console.log("token", token);
+  console.log("token", token);
   if (!token || !userId) {
     console.error("Token or User ID not found");
     redirectToLogin(); // Función para redirigir al usuario a la página de inicio de sesión
