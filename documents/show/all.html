@@ -9,30 +9,24 @@
     <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
     <link rel="stylesheet" href="./styles.css">
     <script src="./script.js"></script>
-
 </head>
 
 <body>
     <div class="grid">
-        <header class="header" id="header-container">
-
-        </header>
-        <aside class="sidenav" id="aside-container">
-        </aside>
+        <header class="header" id="header-container"></header>
+        <aside class="sidenav" id="aside-container"></aside>
         <main class="main" id="main">
+            <iframe src="../add/upload.html" frameborder="0" width="50%" height="10%"></iframe>
             <section class="gallery">
                 <div class="container">
                     <div class="toolbar">
                         <div class="search-wrapper">
                             <input type="search" placeholder="Buscar documento">
                             <div class="counter">
-                                Documentos Totales: <span>12</span>
+                                Documentos Totales: <span>0</span>
                             </div>
                         </div>
                         <ul class="view-options">
-                            <!-- <li class="zoom">
-                                <input type="range" min="180" max="380" value="280">
-                            </li> -->
                             <li class="show-grid active">
                                 <button disabled>
                                     <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/162656/grid-view.svg"
@@ -53,11 +47,10 @@
         </main>
         <footer class="footer">
             <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
-            <p> <i class="fas fa-heart footer__icon"></i> </p>
+            <p><i class="fas fa-heart footer__icon"></i></p>
         </footer>
     </div>
     <script>
-        // Función para cargar el contenido del aside
         async function loadAsideContent(containerId) {
             const response = await fetch('../../components/aside/aside.html');
             const asideContent = await response.text();
@@ -68,11 +61,8 @@
             const asideContent = await response.text();
             document.getElementById(containerId).innerHTML = asideContent;
         }
-
-        // Cargar el aside en diferentes contenedores
         loadAsideContent('aside-container');
         loadHeaderContent('header-container');
-
     </script>
 </body>
 

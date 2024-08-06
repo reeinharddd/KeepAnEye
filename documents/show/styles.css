@@ -225,3 +225,76 @@ footer span {
     padding: 0.5rem 0 0;
   }
 }
+/* Styles for the iframe content */
+iframe {
+    width: 100%;
+    max-width: 2000px;
+    border: none;
+    height: 300px; /* Adjust the height as needed */
+    border-radius: 10px;
+    box-shadow: 0 10px 20px var(--hover-color);
+}
+
+/* Styles for the alert messages */
+.alert {
+    padding: 10px 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    color: var(--white);
+    font-size: 1rem;
+    text-align: center;
+}
+
+.alert.success {
+    background-color: var(--primary-color);
+}
+
+.alert.error {
+    background-color: #e31b23;
+}
+
+.alert.info {
+    background-color: var(--gray);
+}
+
+/* Styles for the upload form */
+form#uploadForm {
+    background: var(--white);
+    padding: 20px;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    box-shadow: 0 10px 20px var(--hover-color);
+    max-width: 500px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form#uploadForm label {
+    font-weight: bold;
+}
+
+form#uploadForm input[type="file"],
+form#uploadForm input[type="hidden"],
+form#uploadForm button {
+    width: 100%;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+form#uploadForm input[type="file"] {
+    border: 1px solid var(--border-color);
+}
+
+form#uploadForm button {
+    background-color: var(--primary-color);
+    color: var(--white);
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+form#uploadForm button:hover {
+    background-color: darken(var(--primary-color), 10%);
+}

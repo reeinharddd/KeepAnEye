@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Medical Condition</title>
+    <style>
+        /* Opcional: Agregar algo de estilo básico */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 500px;
+            margin: auto;
+        }
+
+        input,
+        select,
+        button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.875em;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Add Medical Condition</h2>
+    <form id="add-medical-condition-form">
+        <label for="condition-name">Name</label>
+        <input type="text" id="condition-name" placeholder="Name" required>
+
+        <label for="condition-severity">Severity</label>
+        <select id="condition-severity" required>
+            <option value="" disabled selected>Select severity</option>
+            <option value="Baja">Low</option>
+            <option value="Media">Moderate</option>
+            <option value="Alta">High</option>
+            <option value="Muy Alta">Very High</option>
+        </select>
+
+        <label for="condition-treatment">Treatment</label>
+        <input type="text" id="condition-treatment" placeholder="Treatment" required>
+
+        <label for="condition-symptoms">Symptoms</label>
+        <input type="text" id="condition-symptoms" placeholder="Symptoms" required>
+
+        <label for="condition-diagnosis-date">Diagnosis Date</label>
+        <input type="date" id="condition-diagnosis-date" required>
+
+        <button type="submit">Add Medical Condition</button>
+    </form>
+
+    <script src="./script.js"></script>
+</body>
+
+</html>

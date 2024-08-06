@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Medical Info</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #allergies-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .allergy-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .delete-btn {
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #ff1c1c;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>User Medical Info</h1>
+    <ul id="allergies-list"></ul>
+
+    <script>
+        const apiUrl = "http://localhost:5123/api"; // Fallback a URL local si no se define en .env
+
+        async function fetchUserMedicalInfo() {
+            const token = localStorage.getItem("token");
+            const userId = localStorage.getItem("userId");
+
+            if (!token || !userId) {
+                console.error("Token or User ID not found");
+                redirectToLogin();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}/medicalinfo/${userId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.error("Unauthorized access - redirecting to login");
+                        redirectToLogin();
+                    }
+                    throw new Error(`Failed to fetch medical info: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log("User medical info:", data);
+                displayAllergies(data.healthInfo.allergies);
+                // Aquí puedes manejar los datos recibidos y actualizar la UI
+            } catch (error) {
+                console.error("Error fetching medical info:", error.message);
+                // Añade manejo adicional de errores según sea necesario
+            }
+        }
+
+        function displayAllergies(allergies) {
+            const allergiesList = document.getElementById("allergies-list");
+            allergiesList.innerHTML = ""; // Clear the list first
+
+            allergies.forEach((allergy, index) => {
+                const listItem = document.createElement("li");
+                listItem.className = "allergy-item";
+                listItem.innerHTML = `
+                    <span>
+                        <strong>Name:</strong> ${allergy.name} | 
+                        <strong>Severity:</strong> ${allergy.severity} | 
+                        <strong>Reaction:</strong> ${allergy.reaction} | 
+                        <strong>Treatment:</strong> ${allergy.treatment}
+                    </span>
+                    <button class="delete-btn" onclick="deleteAllergy(${index})">Delete</button>
+                `;
+                allergiesList.appendChild(listItem);
+            });
+        }
+
+        function deleteAllergy(index) {
+            const allergiesList = document.getElementById("allergies-list");
+            allergiesList.children[index].remove();
+            // Aquí puedes agregar la lógica para eliminar la alergia del backend
+            // Por ejemplo, puedes hacer una llamada a tu API para eliminar la alergia en la base de datos
+            console.log(`Allergy at index ${index} deleted.`);
+        }
+
+        fetchUserMedicalInfo();
+    </script>
+</body>
+
+</html>

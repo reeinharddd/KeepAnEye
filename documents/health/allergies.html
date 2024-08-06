@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Allergy</title>
+    <style>
+        /* Opcional: Agregar algo de estilo básico */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        form {
+            max-width: 400px;
+            margin: auto;
+        }
+
+        input,
+        select,
+        button {
+            display: block;
+            width: 100%;
+            margin-bottom: 10px;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Add Allergy</h2>
+    <form id="add-allergy-form">
+        <label for="allergy-name">Name</label>
+        <input type="text" id="allergy-name" placeholder="Name" required>
+
+        <label for="allergy-severity">Severity</label>
+        <select id="allergy-severity" required>
+            <option value="" disabled selected>Select severity</option>
+            <option value="Baja">Low</option>
+            <option value="Media">Medium</option>
+            <option value="Alta">High</option>
+            <option value="Muy Alta">Very High</option>
+        </select>
+
+        <label for="allergy-reaction">Reaction</label>
+        <input type="text" id="allergy-reaction" placeholder="Reaction" required>
+
+        <label for="allergy-treatment">Treatment</label>
+        <input type="text" id="allergy-treatment" placeholder="Treatment" required>
+
+        <button type="submit">Add Allergy</button>
+    </form>
+    <script src="./script.js"></script>
+</body>
+
+</html>

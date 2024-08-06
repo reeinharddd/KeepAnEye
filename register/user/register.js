@@ -115,6 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (response.ok) {
         alert("Usuario registrado exitosamente.");
         form.reset();
+        window.location.href = "../../login/LoginScreen/LoginScreen.html";
       } else {
         console.log("Register Error Data:", responseData);
         alert(`Error: ${responseData.message}`);

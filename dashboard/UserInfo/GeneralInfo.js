@@ -9,13 +9,16 @@ let pinMarker;
 let geofenceCircle;
 
 //Funcion para obtener los datos del usuario cunado se cargue la pagina
-window.onload = fetchUserProfile;
-
+window.onload = async () => {
+  await fetchUserProfile();
+  fetchAllUserMetrics();
+  initMap();
+};
 //Obtener Metrics:
-document.addEventListener("DOMContentLoaded", fetchAllUserMetrics);
+// document.addEventListener("DOMContentLoaded", fetchAllUserMetrics);
 
-// Llamar a la función de inicialización del mapa cuando se cargue la página
-document.addEventListener("DOMContentLoaded", initMap);
+// // Llamar a la función de inicialización del mapa cuando se cargue la página
+// document.addEventListener("DOMContentLoaded", initMap);
 
 // Conectar al Hub de SignalR
 const connection = new signalR.HubConnectionBuilder()
@@ -65,19 +68,24 @@ async function fetchUserProfile() {
     }
 
     const data = await response.json();
-    // console.log("User profile:", data);
+    console.log("User profile:", data);
 
     let userId;
-    if (data.user_type === "admin") {
+
+    if (data.userType === "admin") {
       if (data.patients && data.patients.length > 0) {
         userId = data.patients[0].patientId;
+        console.log(
+          "Admin user with patients, using first patient ID:",
+          userId
+        );
       } else {
-        console.error("No valid userId found for admin user with no patients");
-        redirectToLogin();
-        return;
+        userId = data.id; // Usar el propio ID si no hay pacientes
+        console.log("Admin user with no patients, using own ID:", userId);
       }
     } else {
-      userId = data.id;
+      userId = data.id; // Usar el propio ID para usuarios que no son admin
+      console.log("Regular user ID:", userId);
     }
 
     localStorage.setItem("userId", userId);
@@ -86,39 +94,42 @@ async function fetchUserProfile() {
     const userPhoto = data.userPhoto;
 
     // Actualizar elementos DOM con los datos del usuario
-    const welcomeTitle = document.querySelector(
-      ".main-header__welcome-title.text-light"
-    );
-    if (welcomeTitle) {
-      welcomeTitle.innerText = fullName;
-    }
-
-    const profileTitle = document.querySelector(
-      ".sidenav__profile-title.text-light"
-    );
-    if (profileTitle) {
-      profileTitle.innerText = fullName;
-    }
-
-    const profileAvatar = document.querySelector(".sidenav__profile-avatar");
-    if (profileAvatar) {
-      profileAvatar.src = userPhoto;
-    }
-
-    const headerAvatar = document.querySelector(".header__avatar");
-    if (headerAvatar) {
-      headerAvatar.style.backgroundImage = `url(${userPhoto})`;
-    }
+    updateUserProfileDOM(fullName, userPhoto);
 
     // Llamar a las funciones de obtención de métricas y documentos después de obtener el perfil
-    fetchUserLocation();
-    fetchUserMedicalInfo();
-    fetchAllUserMetrics();
-    fetchAllUserAppointments();
-    fetchAllUserReminders();
+    await fetchUserLocation();
+    await fetchUserMedicalInfo();
+    await fetchAllUserAppointments();
+    await fetchAllUserReminders();
   } catch (error) {
     console.error("Error fetching user profile:", error.message);
     redirectToLogin();
+  }
+}
+
+function updateUserProfileDOM(fullName, userPhoto) {
+  const welcomeTitle = document.querySelector(
+    ".main-header__welcome-title.text-light"
+  );
+  if (welcomeTitle) {
+    welcomeTitle.innerText = fullName;
+  }
+
+  const profileTitle = document.querySelector(
+    ".sidenav__profile-title.text-light"
+  );
+  if (profileTitle) {
+    profileTitle.innerText = fullName;
+  }
+
+  const profileAvatar = document.querySelector(".sidenav__profile-avatar");
+  if (profileAvatar) {
+    profileAvatar.src = userPhoto;
+  }
+
+  const headerAvatar = document.querySelector(".header__avatar");
+  if (headerAvatar) {
+    headerAvatar.style.backgroundImage = `url(${userPhoto})`;
   }
 }
 
@@ -378,7 +389,7 @@ async function fetchUserMedicalInfo() {
     }
 
     const data = await response.json();
-    // console.log("User medical info:", data);
+    console.log("User medical info:", data);
     fetchUserMedicalDocuments();
 
     // Aquí puedes manejar los datos recibidos y actualizar la UI
