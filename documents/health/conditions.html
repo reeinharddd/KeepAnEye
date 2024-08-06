@@ -4,64 +4,71 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Medical Condition</title>
-    <style>
-        /* Opcional: Agregar algo de estilo básico */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 20px;
-        }
-
-        form {
-            max-width: 500px;
-            margin: auto;
-        }
-
-        input,
-        select,
-        button {
-            display: block;
-            width: 100%;
-            margin-bottom: 10px;
-            padding: 8px;
-            box-sizing: border-box;
-        }
-
-        .error {
-            color: red;
-            font-size: 0.875em;
-        }
-    </style>
+    <title>Agregar Condicion Medicas</title>
+    <link rel="icon" type="image/jpg" href="../../images/logo.png" />
+    <link rel="stylesheet" href="../../dashboard/Main/Dashboard.css">
+    <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
-    <h2>Add Medical Condition</h2>
-    <form id="add-medical-condition-form">
-        <label for="condition-name">Name</label>
-        <input type="text" id="condition-name" placeholder="Name" required>
 
-        <label for="condition-severity">Severity</label>
-        <select id="condition-severity" required>
-            <option value="" disabled selected>Select severity</option>
-            <option value="Baja">Low</option>
-            <option value="Media">Moderate</option>
-            <option value="Alta">High</option>
-            <option value="Muy Alta">Very High</option>
-        </select>
+    <div class="grid">
 
-        <label for="condition-treatment">Treatment</label>
-        <input type="text" id="condition-treatment" placeholder="Treatment" required>
+        <header class="header" id="header-container">
 
-        <label for="condition-symptoms">Symptoms</label>
-        <input type="text" id="condition-symptoms" placeholder="Symptoms" required>
+        </header>
+        <aside class="sidenav" id="aside-container">
 
-        <label for="condition-diagnosis-date">Diagnosis Date</label>
-        <input type="date" id="condition-diagnosis-date" required>
+        </aside>
+        <main class="main" id="main">
+            <h2>Agregar condicion medica</h2>
+            <form id="add-medical-condition-form">
+                <label for="condition-name">Name</label>
+                <input type="text" id="condition-name" placeholder="Name" required>
 
-        <button type="submit">Add Medical Condition</button>
-    </form>
+                <label for="condition-severity">Severity</label>
+                <select id="condition-severity" required>
+                    <option value="" disabled selected>Select severity</option>
+                    <option value="Baja">Low</option>
+                    <option value="Media">Moderate</option>
+                    <option value="Alta">High</option>
+                    <option value="Muy Alta">Very High</option>
+                </select>
 
-    <script src="./script.js"></script>
+                <label for="condition-treatment">Treatment</label>
+                <input type="text" id="condition-treatment" placeholder="Treatment" required>
+
+                <label for="condition-symptoms">Symptoms</label>
+                <input type="text" id="condition-symptoms" placeholder="Symptoms" required>
+
+                <label for="condition-diagnosis-date">Diagnosis Date</label>
+                <input type="date" id="condition-diagnosis-date" required>
+
+                <button type="submit">Add Medical Condition</button>
+            </form>
+        </main>
+        <footer class="footer">
+            <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
+            <p><i class="fas fa-heart footer__icon"></i></p>
+        </footer>
+
+        <script src="./script.js"></script>
+        <script>  // Función para cargar el contenido del aside
+            async function loadAsideContent(containerId) {
+                const response = await fetch('../../components/aside/aside.html');
+                const asideContent = await response.text();
+                document.getElementById(containerId).innerHTML = asideContent;
+            }
+            async function loadHeaderContent(containerId) {
+                const response = await fetch('../../components/header/header.html');
+                const asideContent = await response.text();
+                document.getElementById(containerId).innerHTML = asideContent;
+            }
+
+            // Cargar el aside en diferentes contenedores
+            loadAsideContent('aside-container');
+            loadHeaderContent('header-container');</script>
 </body>
 
 </html>

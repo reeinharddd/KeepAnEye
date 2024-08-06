@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospitales</title>
+    <link rel="icon" type="image/jpg" href="../../images/logo.png" />
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
+        #hospitals-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .hospital-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .delete-btn {
+            background-color: #ff4c4c;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .delete-btn:hover {
+            background-color: #ff1c1c;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>User Medical Info - Hospitals</h1>
+    <ul id="hospitals-list"></ul>
+
+    <script>
+        const apiUrl = "http://localhost:5123/api";
+
+        async function fetchUserMedicalInfo() {
+            const token = localStorage.getItem("token");
+            const userId = localStorage.getItem("userId");
+
+            if (!token || !userId) {
+                console.error("Token or User ID not found");
+                redirectToLogin();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}/medicalinfo/${userId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.error("Unauthorized access - redirecting to login");
+                        redirectToLogin();
+                    }
+                    throw new Error(`Failed to fetch medical info: ${response.statusText}`);
+                }
+
+                const data = await response.json();
+                console.log("User medical info:", data);
+                displayHospitals(data.hospitals);
+            } catch (error) {
+                console.error("Error fetching medical info:", error.message);
+            }
+        }
+
+        function displayHospitals(hospitals) {
+            const hospitalsList = document.getElementById("hospitals-list");
+            hospitalsList.innerHTML = "";
+
+            hospitals.forEach((hospital, index) => {
+                const listItem = document.createElement("li");
+                listItem.className = "hospital-item";
+                listItem.innerHTML =
+                    `<span>
+                        <strong>Name:</strong> ${hospital.name} | 
+                        <strong>Phone:</strong> ${hospital.phone} | 
+                        <strong>Address:</strong> ${hospital.address ? hospital.address.street + ', ' + hospital.address.city + ', ' + hospital.address.state + ' ' + hospital.address.zip : 'N/A'}
+                    </span>
+                    <button class="delete-btn" onclick="deleteHospital(${index})">Delete</button>`;
+                hospitalsList.appendChild(listItem);
+            });
+        }
+
+        async function deleteHospital(index) {
+            const token = localStorage.getItem("token");
+            const userId = localStorage.getItem("userId");
+
+            if (!token || !userId) {
+                console.error("Token or User ID not found");
+                redirectToLogin();
+                return;
+            }
+
+            try {
+                const response = await fetch(`${apiUrl}/medicalinfo/${userId}/hospitals/${index}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        console.error("Unauthorized access - redirecting to login");
+                        redirectToLogin();
+                    }
+                    throw new Error(`Failed to delete hospital: ${response.statusText}`);
+                }
+
+                console.log(`Hospital at index ${index} deleted.`);
+                fetchUserMedicalInfo(); // Refresh the list after deletion
+            } catch (error) {
+                console.error("Error deleting hospital:", error.message);
+            }
+        }
+
+        function redirectToLogin() {
+            // Redirect to login page
+            window.location.href = "../../login/LoginScreen/LoginScreen.html";
+        }
+
+        fetchUserMedicalInfo();
+    </script>
+</body>
+
+</html>

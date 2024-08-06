@@ -620,6 +620,7 @@ async function fetchAllUserReminders() {
 }
 
 // Función para actualizar el DOM con los recordatorios
+// Función para actualizar el DOM con los recordatorios
 function updateRemindersDOM(reminders) {
   const container = document.getElementById("remindersContainer");
   if (!container) {
@@ -631,18 +632,22 @@ function updateRemindersDOM(reminders) {
 
   const now = new Date();
 
-  const filteredReminders = reminders
-    .filter((reminder) => {
-      const reminderDate = new Date(reminder.date);
-      const isPending = reminder.status === "Pending";
-      return reminderDate >= now && isPending;
-    })
-    .sort((a, b) => new Date(a.date) - new Date(b.date))
-    .slice(0, 5);
+  // Filtrar recordatorios que aún están pendientes
+  const filteredReminders = reminders.filter((reminder) => {
+    const reminderDate = new Date(reminder.date);
+    const isPending = reminder.status === "Pending";
+    console.log("reminder antes de durante", reminder);
+
+    return reminderDate >= now && isPending;
+  });
+
+  filteredReminders.sort((a, b) => new Date(a.date) - new Date(b.date));
+
+  const limitedReminders = filteredReminders.slice(0, 5);
 
   container.innerHTML = "";
 
-  filteredReminders.forEach((reminder, index) => {
+  limitedReminders.forEach((reminder, index) => {
     const reminderElement = document.createElement("div");
     reminderElement.classList.add("card__row");
 
@@ -650,13 +655,24 @@ function updateRemindersDOM(reminders) {
     iconElement.classList.add("card__icon");
     iconElement.innerHTML = '<i class="fas fa-bell"></i>';
 
+    const reminderDate = new Date(reminder.date);
+    const currentDate = new Date();
+
+    // Calcular los días restantes
+    const timeDiff = reminderDate.getTime() - currentDate.getTime();
+    const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+
+    // Crear el elemento para mostrar la fecha y los días restantes
     const timeElement = document.createElement("div");
     timeElement.classList.add("card__time");
-    timeElement.innerHTML = `<div>${new Date(
-      reminder.date
-    ).toLocaleDateString()} ${new Date(
-      reminder.date
-    ).toLocaleTimeString()}</div>`;
+    timeElement.innerHTML = `
+      <div>
+        Fecha: ${reminderDate.toLocaleDateString()}
+      </div>
+      <div>
+        Días restantes: ${daysRemaining}
+      </div>
+    `;
 
     const detailElement = document.createElement("div");
     detailElement.classList.add("card__detail");
@@ -670,7 +686,7 @@ function updateRemindersDOM(reminders) {
     const descriptionElement = document.createElement("div");
     descriptionElement.classList.add("card__description");
     descriptionElement.textContent = reminder.description
-      ? reminder.description
+      ? `Description: ${reminder.description}`
       : "No description provided";
 
     const noteElement = document.createElement("div");
@@ -698,6 +714,7 @@ function updateRemindersDOM(reminders) {
     container.appendChild(reminderElement);
   });
 }
+
 async function markReminderAsComplete(reminder, index) {
   const token = localStorage.getItem("token");
   if (!token) {
@@ -781,13 +798,13 @@ async function fetchUserMedicalDocuments() {
 function getMimeTypeImage(mimeType) {
   switch (mimeType) {
     case "application/pdf":
-      return "../../images/pdf.png"; // Ruta a la imagen del ícono PDF
+      return "../../images/pdf-removebg-preview.png"; // Ruta a la imagen del ícono PDF
     case "application/msword":
     case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
       return "../../images/word.png"; // Ruta a la imagen del ícono Word
     // Agrega más casos según los tipos MIME que necesites manejar
     default:
-      return "../../images/pdf.png"; // Ruta a la imagen por defecto
+      return "../../images/pdf-removebg-preview.png"; // Ruta a la imagen por defecto
   }
 }
 
@@ -841,3 +858,10 @@ function redirectToLogin() {
 //     window.location.href = "../../login/LoginScreen/LoginScreen.html";
 //   }, 30000); // 3000 milisegundos = 3 segundos
 // }
+function logout() {
+  // 1. Eliminar datos del usuario
+  localStorage.removeItem("token"); // Elimina el token de autenticación
+  sessionStorage.removeItem("user"); // Elimina los datos del usuario, si los almacenas en sessionStorage
+  // 3. Redirigir al usuario a la página de inicio de sesión
+  window.location.href = "../../login/LoginScreen/LoginScreen.html"; // Cambia esto según la ruta de tu página de inicio de sesión
+}

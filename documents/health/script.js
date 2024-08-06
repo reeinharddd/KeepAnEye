@@ -1,5 +1,4 @@
 /** @format */
-const apiUrl = "http://localhost:5123/api"; // Fallback a URL local si no se define en .env
 document.addEventListener("DOMContentLoaded", () => {
   // Aquí va tu código addData
 

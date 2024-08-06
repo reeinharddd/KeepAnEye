@@ -4,16 +4,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicinas</title>
     <link rel="icon" type="image/jpg" href="../../images/logo.png" />
-    <link rel="stylesheet" href="styles.css">
-    <title>Alergias</title>
 
     <link rel="stylesheet" href="../../dashboard/Main/Dashboard.css">
     <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
-
     <div class="grid">
 
         <header class="header" id="header-container">
@@ -23,10 +22,9 @@
 
         </aside>
         <main class="main" id="main">
-            <h1>Alergias</h1>
-
-            <ul id="allergies-list"></ul>
-            <iframe src="../../documents/health/allergies.html" title="Alergias" width="100%" height="700px"
+            <h1>Medicinas</h1>
+            <ul id="medicines-list"></ul>
+            <iframe src="../../documents/health/medicines.html" title="Alergias" width="100%" height="700px"
                 frameBorder="0"></iframe>
         </main>
         <footer class="footer">
@@ -34,10 +32,23 @@
             <p><i class="fas fa-heart footer__icon"></i></p>
         </footer>
     </div>
-
     <script>
+        // Función para cargar el contenido del aside
+        async function loadAsideContent(containerId) {
+            const response = await fetch('../../components/aside/aside.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
+        async function loadHeaderContent(containerId) {
+            const response = await fetch('../../components/header/header.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
 
-        async function fetchUserMedicalInfo() {
+        // Cargar el aside en diferentes contenedores
+        loadAsideContent('aside-container');
+        loadHeaderContent('header-container');
+        async function fetchUserMedicines() {
             const token = localStorage.getItem("token");
             const userId = localStorage.getItem("userId");
 
@@ -66,48 +77,32 @@
 
                 const data = await response.json();
                 console.log("User medical info:", data);
-                displayAllergies(data.healthInfo.allergies);
+                displayMedicines(data.healthInfo.medicines);
             } catch (error) {
                 console.error("Error fetching medical info:", error.message);
             }
         }
-        // Función para cargar el contenido del aside
-        async function loadAsideContent(containerId) {
-            const response = await fetch('../../components/aside/aside.html');
-            const asideContent = await response.text();
-            document.getElementById(containerId).innerHTML = asideContent;
-        }
-        async function loadHeaderContent(containerId) {
-            const response = await fetch('../../components/header/header.html');
-            const asideContent = await response.text();
-            document.getElementById(containerId).innerHTML = asideContent;
-        }
 
-        // Cargar el aside en diferentes contenedores
-        loadAsideContent('aside-container');
-        loadHeaderContent('header-container');
+        function displayMedicines(medicines) {
+            const medicinesList = document.getElementById("medicines-list");
+            medicinesList.innerHTML = "";
 
-        function displayAllergies(allergies) {
-            const allergiesList = document.getElementById("allergies-list");
-            allergiesList.innerHTML = "";
-
-            allergies.forEach((allergy, index) => {
+            medicines.forEach((medicine, index) => {
                 const listItem = document.createElement("li");
-                listItem.className = "allergy-item";
+                listItem.className = "medicine-item";
                 listItem.innerHTML = `
                     <span>
-                        <strong>Name:</strong> ${allergy.name} | 
-                        <strong>Severity:</strong> ${allergy.severity} | 
-                        <strong>Reaction:</strong> ${allergy.reaction} | 
-                        <strong>Treatment:</strong> ${allergy.treatment}
+                        <strong>Name:</strong> ${medicine.name} | 
+                        <strong>Dosage:</strong> ${medicine.dosage} | 
+                        <strong>Frequency:</strong> ${medicine.frequency}
                     </span>
-                    <button class="delete-btn" onclick="deleteAllergy(${index})">Delete</button>
+                    <button class="delete-btn" onclick="deleteMedicine('${medicine.id}')">Delete</button>
                 `;
-                allergiesList.appendChild(listItem);
+                medicinesList.appendChild(listItem);
             });
         }
 
-        async function deleteAllergy(index) {
+        async function deleteMedicine(medicineId) {
             const token = localStorage.getItem("token");
             const userId = localStorage.getItem("userId");
 
@@ -118,7 +113,7 @@
             }
 
             try {
-                const response = await fetch(`${apiUrl}/medicalinfo/${userId}/allergies/${index}`, {
+                const response = await fetch(`${apiUrl}/medicalinfo/${userId}/medicines/${medicineId}`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -131,22 +126,22 @@
                         console.error("Unauthorized access - redirecting to login");
                         redirectToLogin();
                     }
-                    throw new Error(`Failed to delete allergy: ${response.statusText}`);
+                    throw new Error(`Failed to delete medicine: ${response.statusText}`);
                 }
 
-                console.log(`Allergy at index ${index} deleted.`);
-                fetchUserMedicalInfo(); // Refresh the list after deletion
+                console.log(`Medicine with ID ${medicineId} deleted.`);
+                fetchUserMedicines(); // Refresh the list after deletion
             } catch (error) {
-                console.error("Error deleting allergy:", error.message);
+                console.error("Error deleting medicine:", error.message);
             }
         }
 
         function redirectToLogin() {
-            // Redirigir al usuario a la página de login
+            // Redirect to the login page
             window.location.href = "../../login/LoginScreen/LoginScreen.html";
         }
 
-        fetchUserMedicalInfo();
+        fetchUserMedicines();
     </script>
 </body>
 

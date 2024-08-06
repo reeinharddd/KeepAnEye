@@ -4,39 +4,70 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Hospital</title>
-    <style>
-        .error {
-            color: red;
-        }
-    </style>
+    <title>Agregar Hospital</title>
+    <link rel="icon" type="image/jpg" href="../../images/logo.png" />
+    <link rel="stylesheet" href="../../dashboard/Main/Dashboard.css">
+    <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 
 <body>
-    <h2>Add Hospital</h2>
-    <form id="add-hospital-form">
-        <label for="hospital-name">Name:</label>
-        <input type="text" id="hospital-name" placeholder="Name" required>
-        <br>
-        <label for="hospital-phone">Phone:</label>
-        <input type="text" id="hospital-phone" placeholder="Phone (xxx-xxx-xxxx)" pattern="\d{3}-\d{3}-\d{4}" title="Phone number should be in the format xxx-xxx-xxxx" required>
-        <br>
-        <label for="hospital-address-street">Street:</label>
-        <input type="text" id="hospital-address-street" placeholder="Street" required>
-        <br>
-        <label for="hospital-address-city">City:</label>
-        <input type="text" id="hospital-address-city" placeholder="City" required>
-        <br>
-        <label for="hospital-address-state">State:</label>
-        <input type="text" id="hospital-address-state" placeholder="State" required>
-        <br>
-        <label for="hospital-address-zip">Zip Code:</label>
-        <input type="text" id="hospital-address-zip" placeholder="Zip Code" pattern="\d{5}" title="Zip Code should be a 5-digit number" required>
-        <br>
-        <button type="submit">Add Hospital</button>
-    </form>
 
-    <script src="script.js"></script>
+    <div class="grid">
+
+        <header class="header" id="header-container">
+
+        </header>
+        <aside class="sidenav" id="aside-container">
+
+        </aside>
+        <main class="main" id="main">
+            <h2>Agregar Hospital</h2>
+            <form id="add-hospital-form">
+                <label for="hospital-name">Name:</label>
+                <input type="text" id="hospital-name" placeholder="Name" required>
+                <br>
+                <label for="hospital-phone">Phone:</label>
+                <input type="text" id="hospital-phone" placeholder="Phone (xxx-xxx-xxxx)" pattern="\d{3}-\d{3}-\d{4}"
+                    title="Phone number should be in the format xxx-xxx-xxxx" required>
+                <br>
+                <label for="hospital-address-street">Street:</label>
+                <input type="text" id="hospital-address-street" placeholder="Street" required>
+                <br>
+                <label for="hospital-address-city">City:</label>
+                <input type="text" id="hospital-address-city" placeholder="City" required>
+                <br>
+                <label for="hospital-address-state">State:</label>
+                <input type="text" id="hospital-address-state" placeholder="State" required>
+                <br>
+                <label for="hospital-address-zip">Zip Code:</label>
+                <input type="text" id="hospital-address-zip" placeholder="Zip Code" pattern="\d{5}"
+                    title="Zip Code should be a 5-digit number" required>
+                <br>
+                <button type="submit">Add Hospital</button>
+            </form>
+        </main>
+        <footer class="footer">
+            <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
+            <p><i class="fas fa-heart footer__icon"></i></p>
+        </footer>
+
+        <script src="script.js"></script>
+        <script> // Función para cargar el contenido del aside
+            async function loadAsideContent(containerId) {
+                const response = await fetch('../../components/aside/aside.html');
+                const asideContent = await response.text();
+                document.getElementById(containerId).innerHTML = asideContent;
+            }
+            async function loadHeaderContent(containerId) {
+                const response = await fetch('../../components/header/header.html');
+                const asideContent = await response.text();
+                document.getElementById(containerId).innerHTML = asideContent;
+            }
+
+            // Cargar el aside en diferentes contenedores
+            loadAsideContent('aside-container');
+            loadHeaderContent('header-container');</script>
 </body>
 
 </html>

@@ -5,20 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Actualizar Información Médica</title>
+    <link rel="icon" type="image/jpg" href="../../images/logo.png" />
+
+    <link rel="stylesheet" href="../../dashboard/Main/Dashboard.css">
+    <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
+    <link rel="stylesheet" href="./styles.css">
 </head>
 
+
 <body>
-    <h1>Actualizar Información Médica</h1>
-    <form id="update-medical-info-form">
-        <input type="text" id="nss" placeholder="NSS" />
-        <input type="text" id="blood-type" placeholder="Blood Type" />
-        <input type="number" id="height" placeholder="Height" />
-        <input type="number" id="weight" placeholder="Weight" />
-        <button type="submit">Actualizar</button>
-    </form>
+    <div class="grid">
+        <header class="header" id="header-container">
+
+        </header>
+        <aside class="sidenav" id="aside-container">
+
+        </aside>
+        <main class="main" id="main">
+            <h1>Actualizar Información Médica</h1>
+            <form id="update-medical-info-form">
+                <input type="text" id="nss" placeholder="NSS" />
+                <input type="text" id="blood-type" placeholder="Blood Type" />
+                <input type="number" id="height" placeholder="Height" />
+                <input type="number" id="weight" placeholder="Weight" />
+                <button type="submit">Actualizar</button>
+            </form>
 
 
+        </main>
+        <footer class="footer">
+            <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
+            <p><i class="fas fa-heart footer__icon"></i></p>
+        </footer>
+    </div>
     <script src="updateMedicalInfo.js"></script>
+
+    <script>
+        // Función para cargar el contenido del aside
+        async function loadAsideContent(containerId) {
+            const response = await fetch('../../components/aside/aside.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
+        async function loadHeaderContent(containerId) {
+            const response = await fetch('../../components/header/header.html');
+            const asideContent = await response.text();
+            document.getElementById(containerId).innerHTML = asideContent;
+        }
+
+        // Cargar el aside en diferentes contenedores
+        loadAsideContent('aside-container');
+        loadHeaderContent('header-container');
+
+    </script>
 </body>
 
 </html>

@@ -554,6 +554,7 @@ a {
   text-align: right;
   font-size: 14px;
   line-height: 2;
+  flex-direction: column;
 }
 .card__detail {
   display: flex;
@@ -630,11 +631,10 @@ a {
   flex-direction: column;
 }
 .document__img {
-  width: 105px;
-  height: 136px;
+  width: 125px;
+  height: 130px;
   background-image: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/1609106/doc-1.png");
   background-size: cover;
-  box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.12), 0 1px 5px 0 rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: transform 0.3s ease;
 }
@@ -741,4 +741,31 @@ a {
 
 .mark-complete-button:hover {
   background-color: #008c8c;
+}
+/* Estilo para el botón de Logout */
+.logout-button {
+  background-color: #f44336; /* Rojo brillante para el botón */
+  color: white; /* Color del texto blanco */
+  border: none; /* Sin borde */
+  padding: 10px 20px; /* Espaciado interno */
+  text-align: center; /* Centrar texto */
+  text-decoration: none; /* Sin subrayado */
+  display: inline-block; /* En línea con otros elementos */
+  font-size: 16px; /* Tamaño de fuente */
+  margin: 4px 2px 4px 1150px; /* Margen */
+  cursor: pointer; /* Mostrar cursor de mano */
+  border-radius: 4px; /* Bordes redondeados */
+  transition: background-color 0.3s, transform 0.2s; /* Transiciones suaves */
+}
+
+/* Efecto al pasar el ratón sobre el botón */
+.logout-button:hover {
+  background-color: #d32f2f; /* Color más oscuro para el hover */
+  transform: scale(1.05); /* Escalar ligeramente el botón */
+}
+
+/* Efecto al hacer clic en el botón */
+.logout-button:active {
+  background-color: #c62828; /* Color aún más oscuro para el clic */
+  transform: scale(0.95); /* Reducir ligeramente el tamaño del botón */
 }

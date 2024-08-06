@@ -119,13 +119,13 @@ async function fetchUserMedicalDocuments() {
 function getMimeTypeImage(mimeType) {
   switch (mimeType) {
     case "application/pdf":
-      return "../../images/pdf.png"; // Ruta a la imagen del ícono PDF
+      return "../../images/pdf-removebg-preview.png"; // Ruta a la imagen del ícono PDF
     case "application/msword":
     case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
       return "../../images/word.png"; // Ruta a la imagen del ícono Word
     // Agrega más casos según los tipos MIME que necesites manejar
     default:
-      return "../../images/css.png"; // Ruta a la imagen por defecto
+      return "../../images/pdf-removebg-preview.png"; // Ruta a la imagen por defecto
   }
 }
 

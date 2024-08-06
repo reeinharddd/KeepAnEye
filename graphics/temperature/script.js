@@ -58,14 +58,13 @@ async function fetchAllUserMetrics() {
         plotBackgroundColor: "#FAFAFA",
       },
       title: {
-        text: "Daily Body Temperature Readings",
+        text: "Media de Temperatura por dia",
         style: {
           fontSize: "24px",
           fontWeight: "bold",
         },
       },
       subtitle: {
-        text: "Source: User Metrics",
         style: {
           fontSize: "16px",
         },
@@ -73,7 +72,7 @@ async function fetchAllUserMetrics() {
       xAxis: {
         type: "datetime",
         title: {
-          text: "Date",
+          text: "Fecha",
           style: {
             fontSize: "16px",
           },
@@ -89,7 +88,7 @@ async function fetchAllUserMetrics() {
       },
       yAxis: {
         title: {
-          text: "Temperature (°C)",
+          text: "Temperatura (°C)",
           style: {
             fontSize: "16px",
           },
@@ -111,7 +110,7 @@ async function fetchAllUserMetrics() {
             dashStyle: "shortdash",
             width: 2,
             label: {
-              text: "Normal Temperature",
+              text: "Temperatura Normal",
               align: "center",
               style: {
                 color: "green",
@@ -175,5 +174,5 @@ async function fetchAllUserMetrics() {
 }
 
 function redirectToLogin() {
-  window.location.href = "/login";
+  window.location.href = "../../login/LoginScreen/LoginScreen.html";
 }

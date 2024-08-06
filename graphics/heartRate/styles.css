@@ -1,4 +1,21 @@
 
+/* Estilos generales del CSS */
+:root {
+  --main-color: #00A696; /* Color principal */
+  --accent-color: #004d40; /* Color de acento */
+  --text-color: #333; /* Color del texto */
+  --background-color: #f4f4f4; /* Color de fondo */
+  --plot-band-color: rgba(0, 166, 150, 0.1); /* Color de la banda de la gráfica */
+}
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+*{
+  font-family: "Poppins", sans-serif;
+}
+
+
+h1 {
+  color: var(--text-color);
+}
 
 #container {
   width: 80%;
