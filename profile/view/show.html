@@ -6,36 +6,26 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ritmo Cardiaco</title>
     <link rel="icon" type="image/jpg" href="../../images/logo.png" />
-    <script src="./show.js"></script>
+    <script src="show.js"></script>
     <link rel="stylesheet" href="../../dashboard/Main/Dashboard.css">
     <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
 </head>
 
 <body>
     <div class="grid">
-        <header class="header" id="header-container">
-
-        </header>
-        <aside class="sidenav" id="aside-container">
-
-        </aside>
+        <header class="header" id="header-container"></header>
+        <aside class="sidenav" id="aside-container"></aside>
         <main class="main" id="main">
-            <img>
-            <p><b>Nombre: </b> </p>
-            <p><b>Sexo: </b> </p>
-            <p><b>Fecha de nacimiento: </b> </p>
-            <p><b>Correo: </b> </p>
-            <p><b>Telefono: </b> </p>
-            <p><b>Direccion: </b></p>
-            <p><b>Fecha de creacion: </b></P>
+            <img id="userPhoto" alt="User Photo">
+            <p id="fullName"><b>Nombre: </b> </p>
+            <p id="gender"><b>Sexo: </b> </p>
+            <p id="birthDate"><b>Fecha de nacimiento: </b> </p>
+            <p id="email"><b>Correo: </b> </p>
+            <p id="phone"><b>Teléfono: </b> </p>
+            <p id="address"><b>Dirección: </b> </p>
+            <p id="createdAt"><b>Fecha de creación: </b> </P>
             <p><b>Lista de pacientes: </b></p>
-            <ul>
-
-                <li>
-                    <p><b>Nombre: </b> </p>
-                </li>
-
-            </ul>
+            <ul id="patientsList"></ul>
         </main>
         <footer class="footer">
             <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
@@ -43,22 +33,20 @@
         </footer>
     </div>
     <script>
-        // Función para cargar el contenido del aside
         async function loadAsideContent(containerId) {
             const response = await fetch('../../components/aside/aside.html');
             const asideContent = await response.text();
             document.getElementById(containerId).innerHTML = asideContent;
         }
+
         async function loadHeaderContent(containerId) {
             const response = await fetch('../../components/header/header.html');
-            const asideContent = await response.text();
-            document.getElementById(containerId).innerHTML = asideContent;
+            const headerContent = await response.text();
+            document.getElementById(containerId).innerHTML = headerContent;
         }
 
-        // Cargar el aside en diferentes contenedores
         loadAsideContent('aside-container');
         loadHeaderContent('header-container');
-
     </script>
 </body>
 

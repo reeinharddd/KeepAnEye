@@ -1,5 +1,6 @@
 /** @format */
-window.onload = fetchProfile;
+
+const apiUrl = "http://localhost:5123/api";
 
 async function fetchProfile() {
   const token = localStorage.getItem("token");
@@ -10,6 +11,7 @@ async function fetchProfile() {
   }
 
   try {
+    console.log("Fetching user profile");
     const response = await fetch(`${apiUrl}/user/profile`, {
       method: "GET",
       headers: {
@@ -27,10 +29,8 @@ async function fetchProfile() {
     }
 
     const data = await response.json();
-    //console.log("User profile:", data);
+    console.log("User profile:", data);
     generalInfo(data);
-    const fullName = `${data.name.firstName} ${data.name.lastName}`;
-    const userPhoto = data.userPhoto;
   } catch (error) {
     console.error("Error fetching user profile:", error.message);
     redirectToLogin();
@@ -40,15 +40,38 @@ async function fetchProfile() {
 function generalInfo(data) {
   const fullName = `${data.name.firstName} ${data.name.lastName}`;
   const userPhoto = data.userPhoto;
+  const gender = data.sex;
   const email = data.email;
   const phone = data.phone;
-  const address = data.address;
-  const birthDate = data.birthDate;
-  console.log(birthDate);
-  document.getElementById("fullName").textContent = fullName;
+  const address = `${data.address.street}, ${data.address.city}, ${data.address.state}, ${data.address.zip}`;
+  const birthDate = new Date(data.bornDate).toLocaleDateString();
+  const createdAt = new Date(data.created_at).toLocaleDateString();
+
+  document.getElementById("fullName").textContent = `Nombre: ${fullName}`;
   document.getElementById("userPhoto").src = userPhoto;
-  document.getElementById("email").textContent = email;
-  document.getElementById("phone").textContent = phone;
-  document.getElementById("address").textContent = address;
-  document.getElementById("birthDate").textContent = birthDate;
+  document.getElementById("gender").textContent = `Sexo: ${gender}`;
+  document.getElementById("email").textContent = `Correo: ${email}`;
+  document.getElementById("phone").textContent = `Teléfono: ${phone}`;
+  document.getElementById("address").textContent = `Dirección: ${address}`;
+  document.getElementById(
+    "birthDate"
+  ).textContent = `Fecha de nacimiento: ${birthDate}`;
+  document.getElementById(
+    "createdAt"
+  ).textContent = `Fecha de creación: ${createdAt}`;
+
+  const patientsList = document.getElementById("patientsList");
+  patientsList.innerHTML = ""; // Limpiar lista existente
+  data.patients.forEach((patient) => {
+    const li = document.createElement("li");
+    li.textContent = `Nombre: ${patient.name}`;
+    patientsList.appendChild(li);
+  });
 }
+
+// Función para redirigir al login
+function redirectToLogin() {
+  window.location.href = "/login.html";
+}
+
+document.addEventListener("DOMContentLoaded", fetchProfile);

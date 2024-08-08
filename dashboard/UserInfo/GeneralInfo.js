@@ -13,6 +13,8 @@ window.onload = async () => {
   await fetchUserProfile();
   fetchAllUserMetrics();
   initMap();
+  setInterval(fetchInitialData, 500);
+  setInterval(sendData, 1000);
 };
 //Obtener Metrics:
 // document.addEventListener("DOMContentLoaded", fetchAllUserMetrics);
@@ -40,6 +42,16 @@ connection.on("ReceiveAllMetrics", (metricsData) => {
 connection
   .start()
   .catch((err) => console.error("SignalR Connection Error: ", err));
+// Create the SignalR connection
+const connection2 = new signalR.HubConnectionBuilder()
+  .withUrl("http://localhost:5278/readingsHub")
+  .build();
+
+connection.on("ReceiveReading", (data) => {
+  console.log("Received data:", data);
+});
+
+connection.start().catch((err) => console.error("Connection failed: ", err));
 
 // Llamada a la función principal de obtención de perfil de usuario y datos iniciales
 async function fetchUserProfile() {
@@ -164,50 +176,6 @@ async function fetchAllUserMetrics() {
       console.warn("No metrics available to display");
       return;
     }
-
-    updateMetricsDOM(data);
-
-    // // Extraer el último resultado de cada métrica
-    // const latestMetrics = {
-    //   heartRate: null,
-    //   temperature: null,
-    // };
-
-    // data.forEach((record) => {
-    //   if (record.heartRate.length > 0) {
-    //     const latestHeartRate = record.heartRate.reduce((prev, current) =>
-    //       new Date(current.timestamp) > new Date(prev.timestamp)
-    //         ? current
-    //         : prev
-    //     );
-    //     latestMetrics.heartRate = latestHeartRate;
-    //   }
-
-    //   if (record.temperature.length > 0) {
-    //     const latestTemperature = record.temperature.reduce((prev, current) =>
-    //       new Date(current.timestamp) > new Date(prev.timestamp)
-    //         ? current
-    //         : prev
-    //     );
-    //     latestMetrics.temperature = latestTemperature;
-    //   }
-    // });
-
-    // // Inyectar los últimos resultados en el DOM
-    // const heartRateTotalElement = document.getElementById("heartRateTotal");
-    // const temperatureTotalElement = document.getElementById("temperatureTotal");
-
-    // if (heartRateTotalElement) {
-    //   heartRateTotalElement.textContent = latestMetrics.heartRate
-    //     ? `${latestMetrics.heartRate.value} bpm`
-    //     : "No data";
-    // }
-
-    // if (temperatureTotalElement) {
-    //   temperatureTotalElement.textContent = latestMetrics.temperature
-    //     ? `${latestMetrics.temperature.value} °C`
-    //     : "No data";
-    // }
   } catch (error) {
     console.error("Error fetching all user metrics:", error.message);
   }
@@ -215,42 +183,71 @@ async function fetchAllUserMetrics() {
 
 //actualizar metricas del dom
 function updateMetricsDOM(data) {
-  const latestMetrics = {
-    heartRate: null,
-    temperature: null,
-  };
-
-  data.forEach((record) => {
-    if (record.heartRate.length > 0) {
-      const latestHeartRate = record.heartRate.reduce((prev, current) =>
-        new Date(current.timestamp) > new Date(prev.timestamp) ? current : prev
-      );
-      latestMetrics.heartRate = latestHeartRate;
-    }
-
-    if (record.temperature.length > 0) {
-      const latestTemperature = record.temperature.reduce((prev, current) =>
-        new Date(current.timestamp) > new Date(prev.timestamp) ? current : prev
-      );
-      latestMetrics.temperature = latestTemperature;
-    }
-  });
-
+  // const latestMetrics = {
+  //   heartRate: null,
+  //   temperature: null,
+  // };
+  // data.forEach((record) => {
+  //   if (record.heartRate.length > 0) {
+  //     const latestHeartRate = record.heartRate.reduce((prev, current) =>
+  //       new Date(current.timestamp) > new Date(prev.timestamp) ? current : prev
+  //     );
+  //     latestMetrics.heartRate = latestHeartRate;
+  //   }
+  //   if (record.temperature.length > 0) {
+  //     const latestTemperature = record.temperature.reduce((prev, current) =>
+  //       new Date(current.timestamp) > new Date(prev.timestamp) ? current : prev
+  //     );
+  //     latestMetrics.temperature = latestTemperature;
+  //   }
+  // }
+  // );
   // Inyectar los últimos resultados en el DOM
-  const heartRateTotalElement = document.getElementById("heartRateTotal");
-  const temperatureTotalElement = document.getElementById("temperatureTotal");
+}
+function sendData() {
+  // const data = {
+  //   T: Math.floor(Math.random() * 100),
+  //   BPM: Math.floor(Math.random() * 180),
+  // };
+  // fetch("http://localhost:5278/api/readings", {
+  //   method: "POST",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  //   body: JSON.stringify(data),
+  // })
+  //   .then((response) => response.text())
+  //   .then((result) => console.log(result))
+  //   .catch((error) => console.error("Error:", error));
+}
+function fetchInitialData() {
+  fetch("http://localhost:5278/api/readings")
+    .then((response) => response.json())
+    .then((data) => {
+      const heartRateTotalElement = document.getElementById("heartRateTotal");
+      const temperatureTotalElement =
+        document.getElementById("temperatureTotal");
+      if (!heartRateTotalElement || !temperatureTotalElement) {
+        return;
+      }
 
-  if (heartRateTotalElement) {
-    heartRateTotalElement.textContent = latestMetrics.heartRate
-      ? `${latestMetrics.heartRate.value} bpm`
-      : "No data";
-  }
+      // Limpiar contenido existente
+      heartRateTotalElement.textContent = "No data";
+      temperatureTotalElement.textContent = "No data";
 
-  if (temperatureTotalElement) {
-    temperatureTotalElement.textContent = latestMetrics.temperature
-      ? `${latestMetrics.temperature.value} °C`
-      : "No data";
-  }
+      if (data.length > 0) {
+        const latestReading = data[0]; // Primer elemento es el más reciente
+        console.log("Latest Reading:", latestReading);
+
+        if (latestReading.bpm) {
+          heartRateTotalElement.textContent = `${latestReading.bpm} bpm`;
+        }
+        if (latestReading.t) {
+          temperatureTotalElement.textContent = `${latestReading.t} °C`;
+        }
+      }
+    })
+    .catch((error) => console.error("Error fetching initial data:", error));
 }
 
 // Función para obtener la ubicaion del usuario
