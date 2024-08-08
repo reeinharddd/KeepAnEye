@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Actualizar Información Médica</title>
+    <title>Ritmo Cardiaco</title>
     <link rel="icon" type="image/jpg" href="../../images/logo.png" />
-
+    <script src="./show.js"></script>
     <link rel="stylesheet" href="../../dashboard/Main/Dashboard.css">
     <script src="../../dashboard/UserInfo/GeneralInfo.js"></script>
-    <link rel="stylesheet" href="./styles.css">
 </head>
-
 
 <body>
     <div class="grid">
@@ -22,31 +20,28 @@
 
         </aside>
         <main class="main" id="main">
-            <h1>Actualizar Información Médica</h1>
-            <form id="update-medical-info-form">
-                <p>NSS</p>
-                <input type="text" id="nss" placeholder="NSS" />
-                <p>Tipo de sangre</p>
+            <img>
+            <p><b>Nombre: </b> </p>
+            <p><b>Sexo: </b> </p>
+            <p><b>Fecha de nacimiento: </b> </p>
+            <p><b>Correo: </b> </p>
+            <p><b>Telefono: </b> </p>
+            <p><b>Direccion: </b></p>
+            <p><b>Fecha de creacion: </b></P>
+            <p><b>Lista de pacientes: </b></p>
+            <ul>
 
-                <input type="text" id="blood-type" placeholder="Blood Type" />
-                <p>Altura</p>
+                <li>
+                    <p><b>Nombre: </b> </p>
+                </li>
 
-                <input type="number" id="height" placeholder="Height" step=".01" />
-                <p>Peso</p>
-
-                <input type="number" id="weight" placeholder="Weight" step=".01" />
-                <button type="submit">Actualizar</button>
-            </form>
-
-
+            </ul>
         </main>
         <footer class="footer">
             <p><span class="footer__copyright">&copy;</span> 2023 KeepAnEye</p>
             <p><i class="fas fa-heart footer__icon"></i></p>
         </footer>
     </div>
-    <script src="updateMedicalInfo.js"></script>
-
     <script>
         // Función para cargar el contenido del aside
         async function loadAsideContent(containerId) {

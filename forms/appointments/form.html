@@ -17,16 +17,14 @@
 <body>
     <div class="grid">
         <header class="header" id="header-container"></header>
-        <aside class="sidenav" id="aside-container">
-        </aside>
+        <aside class="sidenav" id="aside-container"></aside>
         <main class="main" id="main">
-            <div class="container">
+            <div class="container" id="contact">
                 <!-- Formulario para Citas -->
                 <form id="appointment-form" action="" method="post">
                     <h3>Formulario de Citas</h3>
                     <fieldset>
-                        <input id="appointment-patient-id" placeholder="ID del Paciente" type="text" tabindex="1"
-                            required>
+                        <input type="hidden" id="appointment-patient-id" required>
                     </fieldset>
                     <fieldset>
                         <input id="appointment-date" placeholder="Fecha" type="date" tabindex="2" required>
@@ -38,7 +36,12 @@
                         <input id="appointment-place" placeholder="Lugar" type="text" tabindex="4" required>
                     </fieldset>
                     <fieldset>
-                        <input id="appointment-status" placeholder="Estado" type="text" tabindex="5" required>
+                        <select id="appointment-status" tabindex="5" required>
+                            <option value="" disabled selected>Seleccione el Estado</option>
+                            <option value="Pending">Programada</option>
+                            <option value="completed">Completada</option>
+                            <option value="cancelled">Cancelada</option>
+                        </select>
                     </fieldset>
                     <fieldset>
                         <button type="submit" id="appointment-submit" data-submit="...Enviando">Enviar Cita</button>
@@ -58,16 +61,16 @@
             const asideContent = await response.text();
             document.getElementById(containerId).innerHTML = asideContent;
         }
+
         async function loadHeaderContent(containerId) {
             const response = await fetch('../../components/header/header.html');
-            const asideContent = await response.text();
-            document.getElementById(containerId).innerHTML = asideContent;
+            const headerContent = await response.text();
+            document.getElementById(containerId).innerHTML = headerContent;
         }
 
-        // Cargar el aside en diferentes contenedores
+        // Cargar el aside y el header en diferentes contenedores
         loadAsideContent('aside-container');
         loadHeaderContent('header-container');
-
     </script>
 </body>
 

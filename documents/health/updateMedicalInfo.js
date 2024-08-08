@@ -1,5 +1,4 @@
 /** @format */
-const apiUrl = "http://localhost:5123/api"; // Fallback a URL local si no se define en .env
 
 document.addEventListener("DOMContentLoaded", () => {
   const patientId = localStorage.getItem("userId");
@@ -21,11 +20,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
       if (response.ok) {
         const medicalInfo = await response.json();
-        document.getElementById("nss").value = medicalInfo.NSS || "";
+        console.log("Información médica:", medicalInfo);
+        console.log("nss", medicalInfo.nss);
+        document.getElementById("nss").value = medicalInfo.nss || "";
         document.getElementById("blood-type").value =
-          medicalInfo.BloodType || "";
-        document.getElementById("height").value = medicalInfo.Height || "";
-        document.getElementById("weight").value = medicalInfo.Weight || "";
+          medicalInfo.bloodType || "";
+        document.getElementById("height").value = medicalInfo.height || "";
+        document.getElementById("weight").value = medicalInfo.weight || "";
       } else {
         console.error(
           `Error al cargar la información médica: ${response.statusText}`

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SignalR Real-Time Data</title>
+    <script src="https://cdn.jsdelivr.net/npm/@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+    <style>
+        #readingsList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        #readingsList li {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Real-Time Readings</h1>
+    <ul id="readingsList"></ul>
+
+    <script>
+        // Create the SignalR connection
+        const connection = new signalR.HubConnectionBuilder()
+            .withUrl("http://localhost:5278/readingsHub")
+            .build();
+
+        connection.on("ReceiveReading", (data) => {
+            console.log("Received data:", data);
+            if (data) {
+                const readingsList = document.getElementById('readingsList');
+                const listItem = document.createElement('li');
+                listItem.textContent = `T: ${data.t}, BPM: ${data.bpm}, DateTime: ${data.dateTime}`;
+                readingsList.appendChild(listItem);
+            }
+        });
+
+        connection.start().catch(err => console.error('Connection failed: ', err));
+
+        // Function to send data to the API
+        function sendData() {
+            const data = {
+                T: Math.floor(Math.random() * 100),
+                BPM: Math.floor(Math.random() * 180)
+            };
+
+            fetch('http://localhost:5278/api/readings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            })
+                .then(response => response.text())
+                .then(result => console.log(result))
+                .catch(error => console.error('Error:', error));
+        }
+
+        function fetchInitialData() {
+            fetch('http://localhost:5278/api/readings')
+                .then(response => response.json())
+                .then(data => {
+                    const readingsList = document.getElementById('readingsList');
+                    // Clear the existing list
+                    readingsList.innerHTML = '';
+                    data.forEach(reading => {
+                        const listItem = document.createElement("li");
+                        listItem.textContent = `T: ${reading.t}, BPM: ${reading.bpm}, DateTime: ${reading.dateTime}`;
+                        readingsList.appendChild(listItem);
+                    });
+                })
+                .catch(error => console.error('Error fetching initial data:', error));
+        }
+
+        window.onload = () => {
+            fetchInitialData();
+            setInterval(fetchInitialData, 500);
+            setInterval(sendData, 1000);
+        };
+
+    </script>
+</body>
+
+</html>

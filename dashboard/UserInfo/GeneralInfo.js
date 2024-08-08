@@ -68,7 +68,7 @@ async function fetchUserProfile() {
     }
 
     const data = await response.json();
-    console.log("User profile:", data);
+    //console.log("User profile:", data);
 
     let userId;
 
@@ -85,9 +85,9 @@ async function fetchUserProfile() {
       }
     } else {
       userId = data.id; // Usar el propio ID para usuarios que no son admin
-      console.log("Regular user ID:", userId);
+      //console.log("Regular user ID:", userId);
     }
-
+    localStorage.setItem("profile", JSON.stringify(data));
     localStorage.setItem("userId", userId);
 
     const fullName = `${data.name.firstName} ${data.name.lastName}`;
@@ -137,7 +137,7 @@ function updateUserProfileDOM(fullName, userPhoto) {
 async function fetchAllUserMetrics() {
   const token = localStorage.getItem("token");
   const userId = localStorage.getItem("userId");
-  console.log("token", token);
+  //console.log("token", token);
   if (!token || !userId) {
     console.error("Token or User ID not found");
     redirectToLogin(); // Función para redirigir al usuario a la página de inicio de sesión
@@ -389,7 +389,7 @@ async function fetchUserMedicalInfo() {
     }
 
     const data = await response.json();
-    console.log("User medical info:", data);
+    //console.log("User medical info:", data);
     fetchUserMedicalDocuments();
 
     // Aquí puedes manejar los datos recibidos y actualizar la UI
@@ -423,7 +423,7 @@ async function fetchAllUserAppointments() {
     }
 
     const data = await response.json();
-    console.log("All user appointments:", data);
+    //console.log("All user appointments:", data);
     // console.log("test", data[0].appointments[0]);
 
     // Llamar a la función para actualizar el DOM con las citas
@@ -440,7 +440,7 @@ function updateAppointmentsDOM(appointments) {
     return;
   }
 
-  console.log("appoints antes de filteredAppointments", appointments);
+  //console.log("appoints antes de filteredAppointments", appointments);
 
   const now = new Date();
 
@@ -453,7 +453,7 @@ function updateAppointmentsDOM(appointments) {
       .filter((appointment) => {
         const appointmentDate = new Date(appointment.date);
         const isPending = appointment.status === "Pending";
-        console.log("appoints antes de durante", appointment);
+        //console.log("appoints antes de durante", appointment);
 
         return appointmentDate >= now && isPending;
       })
@@ -518,8 +518,8 @@ function updateAppointmentsDOM(appointments) {
     completeButton.textContent = "Marcar como completado";
     completeButton.classList.add("mark-complete-button");
     completeButton.addEventListener("click", async () => {
-      console.log("Mark as complete clicked");
-      console.log("Appointment:", appointment);
+      //console.log("Mark as complete clicked");
+      //console.log("Appointment:", appointment);
       await markAppointmentAsComplete(appointment, index);
     });
 
@@ -610,7 +610,7 @@ async function fetchAllUserReminders() {
     }
 
     const data = await response.json();
-    console.log("All user reminders:", data);
+    //console.log("All user reminders:", data);
 
     // Llamar a la función para actualizar el DOM con los recordatorios
     updateRemindersDOM(data);
@@ -628,7 +628,7 @@ function updateRemindersDOM(reminders) {
     return;
   }
 
-  console.log("reminders antes de filteredReminders", reminders);
+  // console.log("reminders antes de filteredReminders", reminders);
 
   const now = new Date();
 
@@ -636,7 +636,7 @@ function updateRemindersDOM(reminders) {
   const filteredReminders = reminders.filter((reminder) => {
     const reminderDate = new Date(reminder.date);
     const isPending = reminder.status === "Pending";
-    console.log("reminder antes de durante", reminder);
+    //console.log("reminder antes de durante", reminder);
 
     return reminderDate >= now && isPending;
   });
@@ -700,8 +700,8 @@ function updateRemindersDOM(reminders) {
     completeButton.textContent = "Marcar como completado";
     completeButton.classList.add("mark-complete-button");
     completeButton.addEventListener("click", async () => {
-      console.log("Mark as complete clicked");
-      console.log("Reminder:", reminder);
+      //console.log("Mark as complete clicked");
+      // console.log("Reminder:", reminder);
       await markReminderAsComplete(reminder, index);
     });
 
@@ -788,7 +788,7 @@ async function fetchUserMedicalDocuments() {
     }
 
     const data = await response.json();
-    console.log("User medical documents:", data);
+    //console.log("User medical documents:", data);
     renderDocuments(data);
   } catch (error) {
     console.error("Error fetching medical documents:", error.message);

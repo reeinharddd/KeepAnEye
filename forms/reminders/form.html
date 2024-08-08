@@ -17,27 +17,30 @@
 <body>
     <div class="grid">
         <header class="header" id="header-container"></header>
-        <aside class="sidenav" id="aside-container">
-        </aside>
+        <aside class="sidenav" id="aside-container"></aside>
         <main class="main" id="main">
             <div class="container">
                 <!-- Formulario para Recordatorios -->
                 <form id="reminder-form" action="" method="post">
                     <h3>Formulario de Recordatorios</h3>
                     <fieldset>
-                        <input id="reminder-user-id" placeholder="ID del Usuario" type="text" tabindex="1" required>
+                        <input id="reminder-user-id" type="hidden" required>
                     </fieldset>
                     <fieldset>
-                        <input id="reminder-title" placeholder="Título" type="text" tabindex="2" required>
+                        <input id="reminder-title" placeholder="Título" type="text" tabindex="1" required>
                     </fieldset>
                     <fieldset>
-                        <textarea id="reminder-description" placeholder="Descripción" tabindex="3" required></textarea>
+                        <textarea id="reminder-description" placeholder="Descripción" tabindex="2" required></textarea>
                     </fieldset>
                     <fieldset>
-                        <input id="reminder-date" placeholder="Fecha" type="date" tabindex="4" required>
+                        <input id="reminder-date" placeholder="Fecha" type="date" tabindex="3" required>
                     </fieldset>
                     <fieldset>
-                        <input id="reminder-status" placeholder="Estado" type="text" tabindex="5" required>
+                        <select id="reminder-status" tabindex="4" required>
+                            <option value="" disabled selected>Seleccione el estado</option>
+                            <option value="Pending">Pendiente</option>
+                            <option value="Completed">Completado</option>
+                        </select>
                     </fieldset>
                     <fieldset>
                         <button type="submit" id="reminder-submit" data-submit="...Enviando">Enviar
@@ -67,7 +70,6 @@
         // Cargar el aside en diferentes contenedores
         loadAsideContent('aside-container');
         loadHeaderContent('header-container');
-
     </script>
 </body>
 

@@ -54,15 +54,11 @@ document.addEventListener("DOMContentLoaded", () => {
         } else {
           const errorResponse = await response.json();
           console.error("Error:", errorResponse);
-          alert("Error al enviar la cita: " + response.status);
+          alert("Error al enviar la cita");
         }
       } catch (error) {
         console.error("Error:", error);
         alert("Error al enviar la cita");
       }
-
-      // Delay de 30 segundos para observar cualquier error
-      await new Promise((resolve) => setTimeout(resolve, 30000));
-      console.log("Delay de 30 segundos completado");
     });
 });
